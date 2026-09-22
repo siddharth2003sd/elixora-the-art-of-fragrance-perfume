@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ÉLIXORA — Atelier Admin Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+      --gold-dim: #997d2b;
+      --cream: #f9f6f0;
+      --muted-color: rgba(255, 255, 255, 0.6);
+      --heading-font: 'Cinzel', serif;
+      --font-body: 'Montserrat', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #080808;
+      color: var(--cream);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .admin-top-bar {
+      background: rgba(15, 15, 15, 0.95);
+      border-bottom: 1px solid rgba(212, 175, 112, 0.25);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+    }
+    .admin-brand-tag {
+      font-family: var(--heading-font);
+      font-size: 1.25rem;
+      letter-spacing: 0.15em;
+      color: var(--gold-light);
+    }
+    .admin-badge-atelier {
+      background: rgba(212, 175, 112, 0.15);
+      border: 1px solid rgba(212, 175, 112, 0.35);
+      color: var(--gold);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 3px 8px;
+      border-radius: 999px;
+      margin-left: 10px;
+    }
+    .btn {
+      background: var(--gold);
+      color: #000;
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.25s ease;
+    }
+    .btn:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(212, 175, 112, 0.4);
+    }
+    .admin-portal-content {
+      max-width: 1300px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 5rem 1.5rem;
+      flex: 1;
+    }
+    .admin-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+    .admin-stat-card {
+      background: linear-gradient(145deg, #111111 0%, #171717 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 1.4rem 1.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .admin-stat-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted-color);
+    }
+    .admin-stat-val {
+      font-family: var(--heading-font);
+      font-size: 1.8rem;
+      color: #fff;
+    }
+    .admin-stat-sub {
+      font-size: 0.75rem;
+      color: var(--gold-light);
+    }
+    .admin-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      background: rgba(20, 20, 20, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 1rem 1.25rem;
+      border-radius: 14px;
+    }
+    .admin-filter-tabs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .admin-filter-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--muted-color);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .admin-filter-btn:hover {
+      color: #fff;
+      border-color: rgba(212, 175, 112, 0.4);
+    }
+    .admin-filter-btn.active {
+      background: var(--gold);
+      color: #000;
+      font-weight: 700;
+      border-color: var(--gold);
+    }
+    .admin-search-input {
+      background: #111;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      outline: none;
+      min-width: 260px;
+    }
+    .admin-search-input:focus {
+      border-color: var(--gold);
+    }
+    .admin-orders-table-wrap {
+      background: #111111;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+    }
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      text-align: left;
+    }
+    .admin-table th {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 1rem 1.2rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted-color);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .admin-table td {
+      padding: 1.1rem 1.2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      vertical-align: middle;
+    }
+    .admin-table tr:hover td {
+      background: rgba(212, 175, 112, 0.03);
+    }
+    .order-status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .badge-placed { background: rgba(212, 175, 112, 0.15); color: var(--gold-light); border: 1px solid rgba(212, 175, 112, 0.3); }
+    .badge-processing { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .badge-shipped { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+    .badge-delivered { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+    .badge-cancelled { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    .admin-status-select {
+      background: #191919;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-size: 0.76rem;
+      cursor: pointer;
+      outline: none;
+    }
+    .admin-status-select:focus { border-color: var(--gold); }
+
+    /* Login Lockscreen */
+    #lockscreen {
+      position: fixed;
+      inset: 0;
+      background: #080808;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .lock-card {
+      background: linear-gradient(145deg, #111 0%, #181818 100%);
+      border: 1px solid rgba(212, 175, 112, 0.3);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 380px;
+      padding: 2.5rem;
+      text-align: center;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9);
+    }
+    .pin-input {
+      letter-spacing: 0.4em;
+      font-size: 1.6rem;
+      text-align: center;
+      background: #090909;
+      border: 1px solid rgba(212, 175, 112, 0.35);
+      border-radius: 12px;
+      color: var(--gold-light);
+      padding: 12px;
+      width: 100%;
+      margin: 1.5rem 0;
+      outline: none;
+    }
+    .pin-input:focus { border-color: var(--gold); box-shadow: 0 0 16px rgba(212, 175, 112, 0.25); }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(15, 15, 15, 0.95);
+      border: 1px solid var(--gold);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      z-index: 2000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+  </style>
+</head>
+<body>
+
+  <!-- Lockscreen -->
+  <div id="lockscreen">
+    <div class="lock-card">
+      <div style="color: var(--gold); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px;">ÉLIXORA ATELIER</div>
+      <h2 style="font-family: var(--heading-font); color: #fff; font-size: 1.4rem; margin-bottom: 8px;">Admin Portal</h2>
+      <p style="font-size: 0.78rem; color: var(--muted-color);">Enter security PIN to manage store operations.</p>
+      
+      <form onsubmit="handleLogin(event)">
+        <input type="password" id="pin-field" class="pin-input" placeholder="••••" maxlength="8" autofocus />
+        <div id="pin-err" style="color: #ef4444; font-size: 0.76rem; margin-bottom: 12px; display: none;">Invalid PIN. Access denied.</div>
+        <button type="submit" class="btn" style="width: 100%; justify-content: center;">Unlock Dashboard &rarr;</button>
+        <p style="font-size: 0.72rem; color: rgba(255,255,255,0.4); margin-top: 14px;">Confidential Master Access PIN</p>
+      </form>
+      <div style="margin-top: 1.5rem;">
+        <a href="/" style="color: var(--muted-color); font-size: 0.76rem; text-decoration: none;">&larr; Return to Storefront</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Main Dashboard -->
+  <header class="admin-top-bar">
+    <div style="display: flex; align-items: center;">
+      <span class="admin-brand-tag">ÉLIXORA</span>
+      <span class="admin-badge-atelier">ATELIER OPERATING SYSTEM</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <a href="/" class="btn btn-secondary">&larr; Storefront</a>
+      <button class="btn btn-secondary" onclick="logout()" style="color: #f87171; border-color: rgba(239, 68, 68, 0.4);">Lock</button>
+    </div>
+  </header>
+
+  <main class="admin-portal-content">
+    <!-- Top Stats -->
+    <div class="admin-stats-grid">
+      <div class="admin-stat-card">
+        <span class="admin-stat-label">Total Orders</span>
+        <span class="admin-stat-val" id="stat-total-orders">0</span>
+        <span class="admin-stat-sub">Across All Channels</span>
+      </div>
+      <div class="admin-stat-card">
+        <span class="admin-stat-label">Total Revenue</span>
+        <span class="admin-stat-val" id="stat-total-rev">₹0</span>
+        <span class="admin-stat-sub">Gross Perfume Sales</span>
+      </div>
+      <div class="admin-stat-card">
+        <span class="admin-stat-label">Pending / Placed</span>
+        <span class="admin-stat-val" id="stat-pending-orders" style="color: var(--gold-light);">0</span>
+        <span class="admin-stat-sub">Awaiting Dispatch</span>
+      </div>
+      <div class="admin-stat-card">
+        <span class="admin-stat-label">In Transit / Shipped</span>
+        <span class="admin-stat-val" id="stat-shipped-orders" style="color: #c084fc;">0</span>
+        <span class="admin-stat-sub">BlueDart Air</span>
+      </div>
+      <div class="admin-stat-card">
+        <span class="admin-stat-label">Fulfilled</span>
+        <span class="admin-stat-val" id="stat-delivered-orders" style="color: #4ade80;">0</span>
+        <span class="admin-stat-sub">Delivered with Honors</span>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="admin-toolbar">
+      <div class="admin-filter-tabs">
+        <button class="admin-filter-btn active" onclick="setFilter('all', this)">All Orders (<span id="c-all">0</span>)</button>
+        <button class="admin-filter-btn" onclick="setFilter('Placed', this)">Placed (<span id="c-placed">0</span>)</button>
+        <button class="admin-filter-btn" onclick="setFilter('Processing', this)">Processing (<span id="c-proc">0</span>)</button>
+        <button class="admin-filter-btn" onclick="setFilter('Shipped', this)">Shipped (<span id="c-ship">0</span>)</button>
+        <button class="admin-filter-btn" onclick="setFilter('Delivered', this)">Delivered (<span id="c-deliv">0</span>)</button>
+        <button class="admin-filter-btn" onclick="setFilter('Cancelled', this)">Cancelled (<span id="c-canc">0</span>)</button>
+      </div>
+      <input type="text" class="admin-search-input" id="search-input" placeholder="Search Order ID, Customer, Phone..." oninput="handleSearch(this.value)" />
+    </div>
+
+    <!-- Table -->
+    <div class="admin-orders-table-wrap">
+      <div style="overflow-x: auto;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Order ID & Date</th>
+              <th>Customer Details</th>
+              <th>Delivery Address</th>
+              <th>Items Ordered</th>
+              <th>Total & Payment</th>
+              <th>Live Status & Action</th>
+            </tr>
+          </thead>
+          <tbody id="orders-tbody"></tbody>
+        </table>
+      </div>
+      <div id="empty-state" style="padding: 3rem; text-align: center; color: var(--muted-color); display: none;">
+        No customer orders found matching this filter.
+      </div>
+    </div>
+  </main>
+
+  <div id="toast"></div>
+
+  <script>
+    const DEFAULT_PIN = "0609";
+    let activeFilter = "all";
+    let searchQuery = "";
+
+    function getOrders() {
+      let orders = localStorage.getItem("elixora_orders");
+      if (!orders) {
+        orders = [
+          {
+            id: "ELX-918234",
+            date: "Yesterday, 4:20 PM",
+            customer: { name: "Ananya Singhania", mobile: "+91 98201 44512", email: "ananya.singhania@luxurymail.com" },
+            address: { street: "Penthouse 42B, Altamount Road", city: "Mumbai", state: "Maharashtra", pincode: "400026" },
+            items: [{ name: "Golden Elixir", size: "100ml", qty: 1, price: 14999 }],
+            paymentMethod: "UPI",
+            total: 14999,
+            status: "Delivered",
+            awb: "BLUEDART-AIR-7829104"
+          },
+          {
+            id: "ELX-847291",
+            date: "Today, 11:45 AM",
+            customer: { name: "Vikramaditya Roy", mobile: "+91 98110 52390", email: "vikram.roy@atelierholdings.com" },
+            address: { street: "Villa 14, Amrita Shergill Marg", city: "New Delhi", state: "Delhi", pincode: "110003" },
+            items: [{ name: "Midnight Oud", size: "150ml", qty: 1, price: 18999 }, { name: "Ivory Musk", size: "50ml", qty: 2, price: 9999 }],
+            paymentMethod: "Card",
+            total: 38997,
+            status: "Shipped",
+            awb: "BLUEDART-AIR-3918205"
+          }
+        ];
+        localStorage.setItem("elixora_orders", JSON.stringify(orders));
+      } else {
+        try { orders = JSON.parse(orders); } catch(e) { orders = []; }
+      }
+      return orders;
+    }
+
+    function saveOrders(orders) {
+      localStorage.setItem("elixora_orders", JSON.stringify(orders));
+    }
+
+    function checkAuth() {
+      if (sessionStorage.getItem("elixora_admin_logged") === "true") {
+        document.getElementById("lockscreen").style.display = "none";
+        render();
+      } else {
+        document.getElementById("lockscreen").style.display = "flex";
+      }
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const pin = document.getElementById("pin-field").value.trim();
+      const err = document.getElementById("pin-err");
+      if (pin === DEFAULT_PIN) {
+        sessionStorage.setItem("elixora_admin_logged", "true");
+        err.style.display = "none";
+        document.getElementById("lockscreen").style.display = "none";
+        render();
+        showToast("Welcome to Atelier Administration.");
+      } else {
+        err.style.display = "block";
+      }
+    }
+
+    function logout() {
+      sessionStorage.removeItem("elixora_admin_logged");
+      document.getElementById("lockscreen").style.display = "flex";
+      document.getElementById("pin-field").value = "";
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 3500);
+    }
+
+    function setFilter(status, btn) {
+      activeFilter = status;
+      document.querySelectorAll(".admin-filter-btn").forEach(b => b.classList.remove("active"));
+      if (btn) btn.classList.add("active");
+      renderTable();
+    }
+
+    function handleSearch(val) {
+      searchQuery = val.toLowerCase().trim();
+      renderTable();
+    }
+
+    function updateStatus(id, newStatus) {
+      const orders = getOrders();
+      const order = orders.find(o => o.id === id);
+      if (order) {
+        order.status = newStatus;
+        if (newStatus === "Shipped" && !order.awb) {
+          order.awb = "BLUEDART-AIR-" + Math.floor(1000000 + Math.random() * 9000000);
+        }
+        saveOrders(orders);
+        render();
+        showToast(`Order ${id} marked as ${newStatus}`);
+      }
+    }
+
+    function render() {
+      const orders = getOrders();
+      const total = orders.length;
+      const rev = orders.reduce((sum, o) => sum + (Number(o.total) || 0), 0);
+      const pending = orders.filter(o => o.status === "Placed" || o.status === "Processing").length;
+      const shipped = orders.filter(o => o.status === "Shipped").length;
+      const delivered = orders.filter(o => o.status === "Delivered").length;
+
+      document.getElementById("stat-total-orders").textContent = total;
+      document.getElementById("stat-total-rev").textContent = "₹" + rev.toLocaleString("en-IN");
+      document.getElementById("stat-pending-orders").textContent = pending;
+      document.getElementById("stat-shipped-orders").textContent = shipped;
+      document.getElementById("stat-delivered-orders").textContent = delivered;
+
+      document.getElementById("c-all").textContent = total;
+      document.getElementById("c-placed").textContent = orders.filter(o => o.status === "Placed").length;
+      document.getElementById("c-proc").textContent = orders.filter(o => o.status === "Processing").length;
+      document.getElementById("c-ship").textContent = shipped;
+      document.getElementById("c-deliv").textContent = delivered;
+      document.getElementById("c-canc").textContent = orders.filter(o => o.status === "Cancelled").length;
+
+      renderTable();
+    }
+
+    function renderTable() {
+      const orders = getOrders();
+      const tbody = document.getElementById("orders-tbody");
+      const empty = document.getElementById("empty-state");
+
+      let filtered = orders;
+      if (activeFilter !== "all") {
+        filtered = filtered.filter(o => o.status === activeFilter);
+      }
+      if (searchQuery) {
+        filtered = filtered.filter(o => {
+          return (o.id || "").toLowerCase().includes(searchQuery) ||
+                 (o.customer?.name || "").toLowerCase().includes(searchQuery) ||
+                 (o.customer?.mobile || "").toLowerCase().includes(searchQuery);
+        });
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = "";
+        empty.style.display = "block";
+        return;
+      }
+      empty.style.display = "none";
+      tbody.innerHTML = "";
+
+      filtered.forEach(order => {
+        const badgeClass = {
+          "Placed": "badge-placed",
+          "Processing": "badge-processing",
+          "Shipped": "badge-shipped",
+          "Delivered": "badge-delivered",
+          "Cancelled": "badge-cancelled"
+        }[order.status] || "badge-placed";
+
+        const itemsHtml = (order.items || []).map(it => 
+          `<div style="font-size: 0.78rem; line-height: 1.4;">${it.qty}x <strong>${it.name}</strong> (${it.size || "100ml"})</div>`
+        ).join("");
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>
+            <strong style="color: var(--gold-light); font-family: monospace; font-size: 0.88rem;">${order.id}</strong>
+            <div style="color: var(--muted-color); font-size: 0.72rem; margin-top: 3px;">${order.date || "Just now"}</div>
+            ${order.awb ? `<div style="font-size: 0.68rem; color: #a78bfa; margin-top: 2px;">${order.awb}</div>` : ""}
+          </td>
+          <td>
+            <div style="font-weight: 600; color: #fff;">${order.customer?.name || "VIP Guest"}</div>
+            <div style="color: var(--muted-color); font-size: 0.75rem;">${order.customer?.mobile || "—"}</div>
+            <div style="color: var(--muted-color); font-size: 0.72rem;">${order.customer?.email || "—"}</div>
+          </td>
+          <td>
+            <div style="font-size: 0.76rem; max-width: 220px; line-height: 1.4; color: rgba(255,255,255,0.85);">
+              ${order.address?.street || ""}, ${order.address?.city || ""}, ${order.address?.state || ""} ${order.address?.pincode ? "- " + order.address.pincode : ""}
+            </div>
+          </td>
+          <td>${itemsHtml}</td>
+          <td>
+            <strong style="color: #fff; font-size: 0.95rem;">₹${(Number(order.total) || 0).toLocaleString("en-IN")}</strong>
+            <div style="font-size: 0.7rem; color: var(--muted-color); text-transform: uppercase;">Method: ${order.paymentMethod || "COD"}</div>
+          </td>
+          <td>
+            <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-start;">
+              <span class="order-status-badge ${badgeClass}">${order.status}</span>
+              <select class="admin-status-select" aria-label="Change Status">
+                <option value="Placed">Mark Placed</option>
+                <option value="Processing">Mark Processing</option>
+                <option value="Shipped">Mark Shipped</option>
+                <option value="Delivered">Mark Delivered</option>
+                <option value="Cancelled">Cancel Order</option>
+              </select>
+            </div>
+          </td>
+        `;
+        const select = tr.querySelector(".admin-status-select");
+        select.value = order.status;
+        select.addEventListener("change", (e) => updateStatus(order.id, e.target.value));
+        tbody.appendChild(tr);
+      });
+    }
+
+    checkAuth();
+  </script>
+</body>
+</html>
