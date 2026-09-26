@@ -1,6 +1,6 @@
 {
-  "name": "Remix Remix Remix ÉLIXORA",
-  "description": "A premium, cinematic, and immersive digital fragrance boutique showcasing luxury scents through an elegant, high-end editorial experience.",
+  "name": "ÉLIXORA — The Art of Fragrance",
+  "description": "ÉLIXORA is a luxury digital fragrance destination where every scent tells a story. Discover bespoke perfumes, notes, and cinematic 3D flacons.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

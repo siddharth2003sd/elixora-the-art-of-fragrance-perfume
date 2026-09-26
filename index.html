@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>ÉLIXORA — The Art of Fragrance | Haute Parfumerie</title>
   <meta name="description" content="ÉLIXORA is a luxury digital fragrance destination where every scent tells a story. Discover bespoke perfumes, notes, and cinematic 3D flacons.">
   <meta property="og:title" content="ÉLIXORA — The Art of Fragrance">
@@ -27,6 +27,14 @@
       --gold: #d4af70;
       --gold-light: #ead7a6;
       --accent: #fbcfe8;
+      --accent-color: #d4af70;
+      --accent-secondary: #ead7a6;
+      --glow-color: rgba(212, 175, 112, 0.32);
+      --text-accent: #ead7a6;
+      --background-color: #060403;
+      --perfume-background: radial-gradient(circle at 62% 48%, #633f0c 0%, #2e1a03 45%, #080501 80%, #000000 100%);
+      --perfume-accent: #D4AF37;
+      --perfume-glow: rgba(212, 175, 55, 0.45);
       --burgundy: #3a0d1f;
       --wine: #64152d;
       --emerald: #073b35;
@@ -43,6 +51,7 @@
       scroll-behavior: smooth;
       overscroll-behavior-x: none;
       overscroll-behavior-y: auto;
+      max-width: 100%;
     }
 
     * {
@@ -52,10 +61,31 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    /* Accessibility Focus States */
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+    }
+
+    /* Reduced Motion Respect */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .custom-cursor, .custom-cursor-follower {
+        display: none !important;
+      }
+    }
+
     body {
       overflow-x: hidden;
+      max-width: 100%;
+      width: 100%;
       min-height: 100vh;
-      background-color: var(--bg-color);
+      background-color: transparent !important;
       color: var(--text-color);
       font-family: var(--body-font);
       font-size: 16px;
@@ -81,17 +111,25 @@
       background: var(--gold);
     }
 
-    /* Dynamic Canvas / Radial Background */
-    #bg-layer {
-      display: none;
+    /* Global Whole-Website Perfume Atmospheric Background */
+    .global-perfume-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      pointer-events: none;
+      background: radial-gradient(circle at 62% 48%, #633f0c 0%, #2e1a03 45%, #080501 80%, #000000 100%);
+      will-change: opacity, background;
     }
 
     #particles-canvas {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       z-index: -1;
       pointer-events: none;
     }
@@ -355,8 +393,10 @@
 
     .hamburger-btn {
       display: none;
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      min-height: 44px;
       border-radius: 50%;
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
@@ -364,38 +404,77 @@
       cursor: pointer;
       align-items: center;
       justify-content: center;
+      transition: var(--trans-smooth);
+    }
+    .hamburger-btn:hover {
+      border-color: var(--gold);
+      background: rgba(212, 175, 112, 0.15);
     }
 
-    /* Hero Campaign Section (100% Full-Screen Edge-to-Edge Luxury Advertising Campaign - Fully Covered) */
+    /* ==========================================================
+       ÉLIXORA HAUTE PARFUMERIE — HERO SECTION & ATMOSPHERE SYSTEM
+       ========================================================== */
     .hero-section {
       min-height: 100vh;
       height: 100vh;
       min-height: 100dvh;
       width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 0;
+      max-width: 100%;
       position: relative;
       overflow: hidden;
-      background: #060403;
+      background: transparent !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    /* Ambient base layers */
+    /* Ambient Dual-Layer Atmospheric Transition Engine (700–1200ms) */
     .bg-layer-base, .bg-layer-transition {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       z-index: -3;
       pointer-events: none;
-      transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1);
+      will-change: opacity, background;
     }
     .bg-layer-base {
-      background: radial-gradient(circle at 50% 50%, #120A03 0%, #080402 70%, #000000 100%);
+      background: radial-gradient(circle at 65% 45%, #231607 0%, #140c03 40%, #080501 70%, #030201 100%);
     }
 
+    /* Atmospheric Ambient Environment Backdrop (Covering the whole homepage edge-to-edge) */
+    .hero-ambient-backdrop {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      overflow: hidden;
+      pointer-events: none;
+      filter: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .hero-ambient-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center right;
+      will-change: opacity;
+      filter: none !important;
+      opacity: 1;
+      transition: opacity 0.45s ease-in-out;
+    }
+    .hero-ambient-img-next {
+      opacity: 0;
+    }
+
+    /* Subtle Luxury Film Grain Texture */
     .luxury-grain-overlay {
       position: absolute;
       top: 0;
@@ -404,40 +483,11 @@
       height: 100%;
       z-index: 3;
       pointer-events: none;
-      opacity: 0.04;
+      opacity: 0.03;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
     }
 
-    /* 100% Edge-to-Edge Photograph Canvas Stage */
-    .hero-backdrop-stage {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      overflow: hidden;
-      pointer-events: none;
-    }
-
-    /* Full-Screen Hero Image spanning edge to edge with object-fit: cover (Fully Covered, No Circle) */
-    .hero-campaign-full-img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: 70% center;
-      pointer-events: none;
-      z-index: 1;
-      will-change: opacity, transform;
-      transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-    }
-    .hero-campaign-full-img-next {
-      opacity: 0;
-      z-index: 2;
-    }
-
-    /* Soft luxury atmospheric scrim allowing the full photograph to shine through edge to edge */
+    /* Directional Atmosphere Scrim */
     .hero-campaign-scrim {
       position: absolute;
       inset: 0;
@@ -445,121 +495,230 @@
       height: 100%;
       z-index: 2;
       pointer-events: none;
-      background: 
-        /* Delicate left-to-right gradient: softens brightness behind text while keeping rich photographic scene fully visible */
-        linear-gradient(90deg, 
-          rgba(6, 4, 3, 0.65) 0%, 
-          rgba(6, 4, 3, 0.48) 32%, 
-          rgba(6, 4, 3, 0.15) 55%, 
-          transparent 75%
-        ),
-        /* Top and bottom atmospheric shading for header and aura switcher bar */
-        linear-gradient(180deg, 
-          rgba(6, 4, 3, 0.55) 0%, 
-          transparent 16%, 
-          transparent 82%, 
-          rgba(6, 4, 3, 0.65) 100%
-        );
+      background:
+        linear-gradient(90deg, rgba(6,4,3,0.85) 0%, rgba(6,4,3,0.55) 45%, rgba(6,4,3,0.1) 72%, transparent 100%),
+        linear-gradient(180deg, rgba(6,4,3,0.55) 0%, transparent 20%, transparent 75%, rgba(6,4,3,0.85) 100%);
     }
 
-    /* Product Text Overlay: Situated in the darker/negative space on the left */
-    .hero-left {
+    /* Master Responsive Two-Column Hero Stage Layout */
+    .hero-stage-layout {
       position: relative;
       z-index: 10;
-      max-width: 640px;
-      padding-left: clamp(2.5rem, 7vw, 7.5rem);
-      padding-right: 2rem;
-      padding-top: 1.5rem;
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      align-items: center;
+      padding: clamp(1rem, 4vh, 3.5rem) clamp(2rem, 5vw, 6.5rem);
+      gap: clamp(2rem, 4vw, 5rem);
+      box-sizing: border-box;
     }
-    .eyebrow {
+
+    /* Left Column: High-End Editorial Typography */
+    .hero-text-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      max-width: 580px;
+      z-index: 12;
+      padding-top: 1rem;
+    }
+    .hero-brand-eyebrow {
       font-family: var(--nav-font);
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       letter-spacing: 0.3em;
       text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: 1rem;
+      margin-bottom: 1.15rem;
       display: flex;
       align-items: center;
       gap: 12px;
       font-weight: 600;
     }
-    .eyebrow::before {
+    .hero-brand-eyebrow::before {
       content: "";
       width: 24px;
       height: 1px;
       background: var(--gold);
     }
     .hero-heading {
-      font-size: clamp(2.8rem, 5.2vw, 5.2rem);
-      line-height: 1.12;
-      margin-bottom: 1.5rem;
+      font-size: clamp(2.6rem, 4.6vw, 4.8rem);
+      line-height: 1.08;
+      margin-bottom: 1rem;
       color: #fff;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
       font-family: var(--heading-font);
+      font-weight: 400;
       text-shadow: 0 4px 30px rgba(0, 0, 0, 0.75);
     }
-    .hero-category-badge-wrap {
+    .hero-meta-row {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-    }
-    .hero-category-badge {
+      gap: 10px;
+      margin-bottom: 1.5rem;
       font-family: var(--nav-font);
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      color: var(--gold-light);
-      background: rgba(212, 175, 112, 0.15);
-      border: 1px solid rgba(212, 175, 112, 0.3);
-      padding: 5px 14px;
-      border-radius: 4px;
+      font-size: 0.82rem;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
     }
-    .hero-mood-badge {
-      font-family: var(--body-font);
-      font-size: 0.78rem;
+    .hero-feel-val {
+      color: var(--accent-secondary, var(--gold-light));
+      font-weight: 600;
+    }
+    .hero-meta-sep {
+      color: rgba(255, 255, 255, 0.35);
+    }
+    .hero-family-val {
+      color: rgba(255, 255, 255, 0.7);
       font-weight: 400;
-      letter-spacing: 0.06em;
-      color: rgba(255, 255, 255, 0.75);
-      text-transform: lowercase;
-      font-style: italic;
-      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
+      letter-spacing: 0.12em;
     }
     .hero-tagline {
-      font-size: 1.15rem;
-      color: rgba(255, 255, 255, 0.92);
-      max-width: 520px;
-      margin-bottom: 2.75rem;
+      font-size: clamp(0.98rem, 1.15vw, 1.15rem);
+      color: rgba(255, 255, 255, 0.88);
+      max-width: 500px;
+      margin-bottom: 1.8rem;
       font-weight: 300;
-      line-height: 1.85;
+      line-height: 1.8;
       text-shadow: 0 2px 16px rgba(0, 0, 0, 0.85);
+    }
+    .hero-notes-strip {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 2.2rem;
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.7);
+      font-family: var(--body-font);
+    }
+    .notes-kicker {
+      font-family: var(--nav-font);
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+    }
+    .notes-content {
+      color: rgba(255, 255, 255, 0.85);
+      font-style: italic;
     }
     .hero-actions {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .hero-primary-btn {
+      padding: 0.95rem 2.2rem;
+      background: linear-gradient(135deg, var(--gold) 0%, #b8860b 100%);
+      color: #070707;
+      font-family: var(--nav-font);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 10px 30px rgba(212, 175, 112, 0.3);
+    }
+    .hero-primary-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 40px rgba(212, 175, 112, 0.45);
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
+    }
+    .hero-secondary-btn {
+      padding: 0.95rem 1.8rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      color: #fff;
+      font-family: var(--nav-font);
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-radius: 100px;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .hero-secondary-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold-light);
+      background: rgba(212, 175, 112, 0.1);
+      transform: translateY(-2px);
     }
 
-    /* Minimalist luxury control bar at bottom center of the hero section */
-    
-    /* Hide legacy pill bar */
-    .theme-morph-bar {
+    /* Right Column: Full wide perfume showcase with interactive aura trigger */
+    .hero-bottle-col {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      height: 100%;
+      width: 100%;
+      z-index: 11;
+      pointer-events: auto;
+    }
+    .hero-flacon-stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .hero-flacon-aura {
+      position: absolute;
+      top: 50%;
+      right: 18%;
+      transform: translate(0, -50%);
+      width: clamp(280px, 38vw, 500px);
+      height: clamp(280px, 38vw, 500px);
+      border-radius: 50%;
+      background: var(--glow-color, rgba(212,175,112,0.25));
+      filter: blur(80px);
+      opacity: 0.55;
+      pointer-events: none;
+      transition: background 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
+      z-index: 1;
+    }
+    .hero-flacon-shadow {
+      display: none !important;
+    }
+    .hero-flacon-img, .hero-flacon-img-next {
       display: none !important;
     }
 
-    /* Luxury Left & Right Edge Navigation Arrows */
+    @keyframes flaconFloat {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    /* Luxury Left & Right Floating Edge Navigation Arrows */
     .hero-edge-nav-btn {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
       z-index: 50;
-      width: 52px;
-      height: 52px;
+      width: 50px;
+      height: 50px;
+      min-width: 44px;
+      min-height: 44px;
       border-radius: 50%;
       background: rgba(10, 10, 10, 0.45);
       border: 1px solid rgba(212, 175, 112, 0.35);
@@ -574,9 +733,9 @@
       transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .hero-edge-nav-btn:hover {
-      background: rgba(212, 175, 112, 0.25);
-      border-color: var(--gold);
-      color: var(--gold-light);
+      background: rgba(212, 175, 112, 0.22);
+      border-color: var(--accent-color, var(--gold));
+      color: var(--accent-secondary, var(--gold-light));
       transform: translateY(-50%) scale(1.1);
       box-shadow: 0 12px 35px rgba(212, 175, 112, 0.35);
     }
@@ -584,85 +743,17 @@
       transform: translateY(-50%) scale(0.95);
     }
     .hero-edge-prev {
-      left: 2rem;
+      left: clamp(1rem, 2.5vw, 2.5rem);
     }
     .hero-edge-next {
-      right: 2rem;
+      right: clamp(1rem, 2.5vw, 2.5rem);
     }
 
-    @media (max-width: 900px) {
-      .hero-edge-nav-btn {
-        width: 44px;
-        height: 44px;
-        top: 45%;
-      }
-      .hero-edge-prev {
-        left: 0.75rem;
-      }
-      .hero-edge-next {
-        right: 0.75rem;
-      }
-    }
-
-    .hero-carousel-controls-bar {
-      position: absolute;
-      bottom: 6.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      z-index: 20;
-      background: rgba(0, 0, 0, 0.35);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 10px 24px;
-      border-radius: 100px;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-    }
-    .hero-carousel-arrow {
-      background: none;
-      border: none;
-      color: rgba(255, 255, 255, 0.65);
-      cursor: pointer;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      transition: var(--trans-smooth);
-    }
-    .hero-carousel-arrow:hover {
-      color: #fff;
-      background: rgba(255, 255, 255, 0.1);
-    }
+    /* Hidden legacy containers to prevent broken JS selectors */
+    .theme-morph-bar,
+    .hero-carousel-controls-bar,
     .hero-carousel-dots {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      max-width: 300px;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .hero-carousel-dots::-webkit-scrollbar {
-      display: none;
-    }
-    .hero-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
-      border: none;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      padding: 0;
-      margin: 0 4px;
-    }
-    .hero-dot.active {
-      background: var(--gold);
-      box-shadow: 0 0 8px rgba(212, 175, 112, 0.6);
-      transform: scale(1.2);
+      display: none !important;
     }
     .card-badge {
       font-size: 0.8rem;
@@ -1877,10 +1968,68 @@
 
     /* Luxury Footer */
     .footer {
-      background: #040404;
+      background: rgba(6, 6, 6, 0.82);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       padding: 6rem 4rem 3rem 4rem;
       position: relative;
+    }
+
+    /* Product Detail Modal Navigation Arrows & Swipe Hint */
+    .modal-nav-arrow-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      min-width: 44px;
+      min-height: 44px;
+      border-radius: 50%;
+      background: rgba(12, 12, 12, 0.85);
+      border: 1px solid rgba(212, 175, 112, 0.35);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 60;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      font-size: 1.15rem;
+    }
+    .modal-nav-arrow-btn:hover {
+      background: var(--gold);
+      color: #070707;
+      border-color: var(--gold);
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 12px 35px rgba(212, 175, 112, 0.45);
+    }
+    .modal-nav-arrow-btn.modal-prev {
+      left: clamp(10px, 2vw, 24px);
+    }
+    .modal-nav-arrow-btn.modal-next {
+      right: clamp(10px, 2vw, 24px);
+    }
+    .modal-swipe-hint {
+      position: absolute;
+      top: 1.25rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--nav-font);
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(212, 175, 112, 0.1);
+      border: 1px solid rgba(212, 175, 112, 0.25);
+      padding: 3px 14px;
+      border-radius: 100px;
+      pointer-events: none;
+      z-index: 20;
+      white-space: nowrap;
     }
     .footer-top-grid {
       display: grid;
@@ -2585,111 +2734,144 @@
       /* Hero Section Mobile Optimization */
       .hero-section {
         min-height: 100vh;
-        height: auto;
+        height: 100dvh;
         min-height: 100dvh;
         display: flex;
         flex-direction: column;
-        justify-content: flex-end;
-        padding: 5.5rem 1.25rem 4.5rem 1.25rem;
+        justify-content: space-between;
+        padding: 0;
         position: relative;
         overflow: hidden;
       }
-      .hero-campaign-full-img {
-        object-position: 65% 35%;
-      }
-      .hero-campaign-scrim {
-        background: linear-gradient(
-          180deg,
-          rgba(6, 4, 3, 0.40) 0%,
-          rgba(6, 4, 3, 0.25) 25%,
-          rgba(6, 4, 3, 0.78) 55%,
-          rgba(6, 4, 3, 0.98) 82%,
-          rgba(6, 4, 3, 1) 100%
-        );
-      }
-      .hero-left {
-        padding: 0;
-        text-align: left;
+
+      .hero-stage-layout {
+        grid-template-columns: 1fr;
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
-        max-width: 100%;
-        z-index: 10;
+        justify-content: space-between;
+        align-items: center;
+        height: 100%;
+        min-height: 100dvh;
+        padding-top: calc(64px + env(safe-area-inset-top, 0px));
+        padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+        padding-left: clamp(1rem, 4vw, 1.5rem);
+        padding-right: clamp(1rem, 4vw, 1.5rem);
+        gap: 0.5rem;
+        box-sizing: border-box;
+      }
+
+      /* Bottle Column on Mobile: Uncropped, Centered, Visible */
+      .hero-bottle-col {
+        order: 1;
+        flex: 1 1 auto;
+        height: clamp(190px, 33vh, 290px);
+        min-height: 180px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+      .hero-flacon-stage {
+        height: 100%;
+        max-width: 280px;
+        cursor: pointer;
+      }
+      .hero-flacon-img {
+        max-height: 100%;
+        max-width: 82%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        animation: none;
+      }
+      .hero-flacon-aura {
+        width: 210px;
+        height: 210px;
+        filter: blur(48px);
+      }
+      .hero-flacon-shadow {
+        bottom: 4%;
+        width: 65%;
+      }
+
+      /* Text Column on Mobile: Clean hierarchy beneath bottle */
+      .hero-text-col {
+        order: 2;
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 440px;
+        margin: 0 auto;
+        align-items: center;
+        text-align: center;
+        padding: 0;
+        gap: 0.25rem;
+      }
+      .hero-brand-eyebrow {
+        font-size: 0.68rem;
+        letter-spacing: 0.24em;
+        margin-bottom: 0.25rem;
+        justify-content: center;
+      }
+      .hero-brand-eyebrow::before {
+        display: none;
       }
       .hero-heading {
-        font-size: clamp(1.9rem, 7.2vw, 2.75rem);
-        line-height: 1.16;
-        margin-bottom: 0.85rem;
-        word-break: break-word;
+        font-size: clamp(1.6rem, 6.2vw, 2.3rem);
+        line-height: 1.15;
+        margin-bottom: 0.25rem;
+        text-align: center;
+      }
+      .hero-meta-row {
+        font-size: 0.74rem;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.35rem;
+        justify-content: center;
       }
       .hero-tagline {
-        font-size: 0.92rem;
-        line-height: 1.55;
-        margin-bottom: 1.5rem;
-        max-width: 100%;
+        font-size: 0.82rem;
+        line-height: 1.48;
+        margin-bottom: 0.6rem;
+        text-align: center;
+        max-width: 360px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
-      .hero-category-badge-wrap {
-        justify-content: flex-start;
-        margin-bottom: 1rem;
-        flex-wrap: wrap;
-        gap: 6px;
+      .hero-notes-strip {
+        font-size: 0.72rem;
+        margin-bottom: 0.8rem;
+        justify-content: center;
       }
       .hero-actions {
+        width: 100%;
         display: flex;
         flex-direction: column;
-        width: 100%;
-        gap: 0.75rem;
+        gap: 0.5rem;
       }
-      .hero-actions .primary-btn,
-      .hero-actions .secondary-btn,
-      .hero-actions button,
-      .hero-actions a {
+      .hero-actions .hero-primary-btn,
+      .hero-actions .hero-secondary-btn {
         width: 100%;
         justify-content: center;
-        text-align: center;
-        padding: 0.9rem 1.4rem;
-        font-size: 0.85rem;
+        min-height: 44px;
+        padding: 0.8rem 1.4rem;
+        font-size: 0.8rem;
+        box-sizing: border-box;
       }
 
-      /* Hero Minimal Carousel Controls on Mobile */
-      
-    /* Hide fragrance aura text and hero arrow navbar completely */
-    .hero-carousel-controls-bar,
-    .theme-morph-bar,
-    .hero-carousel-controls {
-      display: none !important;
-      visibility: hidden !important;
-      opacity: 0 !important;
-      pointer-events: none !important;
-    }
-
-    .hero-carousel-controls-bar {
-        position: static;
-        transform: none;
-        margin-top: 1.5rem;
-        width: 100%;
-        justify-content: space-between;
-        padding: 8px 16px;
-        background: rgba(0, 0, 0, 0.55);
+      /* Edge Navigation Arrows on Mobile */
+      .hero-edge-nav-btn {
+        width: 44px;
+        height: 44px;
+        top: 30%;
+        background: rgba(10, 10, 10, 0.55);
       }
-
-      .theme-morph-bar {
-        position: relative;
-        bottom: auto;
-        left: auto;
-        margin-top: 1.5rem;
-        width: 100%;
-        max-width: 100%;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.75rem;
-        padding: 0;
+      .hero-edge-prev {
+        left: 0.5rem;
       }
-      .theme-pills {
-        width: 100%;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        gap: 6px;
+      .hero-edge-next {
+        right: 0.5rem;
       }
 
       .section-container {
@@ -2711,9 +2893,7 @@
       .collections-grid,
       .products-grid,
       .ingredients-grid,
-      .search-results-grid,
-      .discovery-grid,
-      .discovery-sets-grid {
+      .search-results-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
       }
@@ -2757,8 +2937,9 @@
 
       /* Drawer Panels Mobile Full View */
       .drawer-panel {
-        width: 100vw !important;
-        max-width: 100vw !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
       }
 
       /* Footer Top Grid */
@@ -2792,9 +2973,7 @@
       .products-grid,
       .ingredients-grid,
       .mood-cards-container,
-      .search-results-grid,
-      .discovery-grid,
-      .discovery-sets-grid {
+      .search-results-grid {
         grid-template-columns: 1fr;
       }
       .hero-heading {
@@ -2962,6 +3141,41 @@
       text-transform: uppercase;
       font-weight: 600;
       margin-top: 1.2rem;
+    }
+    .tropical-stat-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tropical-badge-sep {
+      display: inline-block;
+      opacity: 0.6;
+    }
+
+    /* Responsive Desktop Defaults for MYOP Studio */
+    .step-label-compact,
+    .step-label-mini,
+    .desc-short,
+    .pop-short,
+    .finish-text-mobile,
+    .btn-text-mobile,
+    .batch-mobile,
+    .tag-mobile {
+      display: none;
+    }
+    .step-label-full,
+    .desc-full,
+    .pop-full,
+    .finish-text-desktop,
+    .btn-text-desktop,
+    .batch-desktop,
+    .tag-desktop {
+      display: inline;
+    }
+    .custom-blend-price-label {
+      font-size: 0.72rem;
+      color: var(--muted-color);
+      display: block;
     }
 
     .myop-studio-grid {
@@ -4950,7 +5164,7 @@
       box-shadow: 0 6px 20px rgba(212, 175, 112, 0.3);
     }
 
-    /* Media queries for new sections */
+    /* Media queries for sections */
     @media (max-width: 1024px) {
       .myop-studio-grid,
       .personalise-studio-card,
@@ -4962,7 +5176,6 @@
         position: static;
         margin-top: 2rem;
       }
-      .discovery-sets-grid,
       .deals-grid,
       .stores-cards-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -4975,24 +5188,821 @@
         display: none;
       }
     }
+
     @media (max-width: 768px) {
+      /* Global Mobile Responsive Safeguards */
+      html, body {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        box-sizing: border-box !important;
+      }
+      *, *::before, *::after {
+        box-sizing: border-box !important;
+      }
+
       .top-announcement-bar {
         display: none;
       }
-      .flacon-picker-grid,
-      .discovery-sets-grid,
+
+      /* ==================================================
+         1 & 2. MAKE YOUR OWN PERFUME (MYOP) MOBILE REBUILD
+         ================================================== */
+      .myop-studio-section {
+        padding: 3.5rem 16px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+      }
+      .myop-hero-banner {
+        width: calc(100% - 32px) !important;
+        max-width: 100% !important;
+        margin: 0 auto 2.5rem auto !important;
+        padding: 28px 16px !important;
+        border-radius: 16px !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        overflow: hidden !important;
+        background: linear-gradient(145deg, rgba(212, 175, 112, 0.09) 0%, rgba(100, 21, 45, 0.16) 100%) !important;
+        border: 1px solid rgba(212, 175, 112, 0.3) !important;
+      }
+      .myop-banner-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+      }
+      .myop-banner-content .section-eyebrow {
+        font-size: 0.68rem !important;
+        letter-spacing: 0.18em !important;
+        margin-bottom: 0.75rem !important;
+        text-align: center !important;
+        display: block !important;
+      }
+      .myop-banner-content h3 {
+        font-family: var(--heading-font) !important;
+        font-size: clamp(32px, 9vw, 46px) !important;
+        line-height: 1.12 !important;
+        text-align: center !important;
+        max-width: 100% !important;
+        margin: 0 auto !important;
+        color: #fff !important;
+        text-wrap: balance !important;
+        overflow-wrap: break-word !important;
+        word-break: break-word !important;
+      }
+      .myop-banner-content p {
+        width: 100% !important;
+        max-width: 320px !important;
+        margin: 20px auto 0 !important;
+        padding: 0 4px !important;
+        font-size: 15px !important;
+        line-height: 1.55 !important;
+        text-align: center !important;
+        color: var(--muted-color) !important;
+        box-sizing: border-box !important;
+        overflow-wrap: break-word !important;
+        word-break: break-word !important;
+      }
+
+      /* ==================================================
+         3. MOBILE STATS / FEATURES GRID (50% OIL, 24H, ENGRAVE)
+         ================================================== */
+      .tropical-badge-large {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 20px auto 0 auto !important;
+        padding: 8px !important;
+        border-radius: 12px !important;
+        background: rgba(212, 175, 112, 0.08) !important;
+        border: 1px solid rgba(212, 175, 112, 0.35) !important;
+        box-sizing: border-box !important;
+      }
+      .tropical-badge-sep {
+        display: none !important;
+      }
+      .tropical-stat-item {
+        font-size: 12px !important;
+        line-height: 1.4 !important;
+        text-align: center !important;
+        padding: 12px 4px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        color: var(--gold-light) !important;
+        font-family: var(--nav-font) !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.03em !important;
+        text-transform: uppercase !important;
+        background: rgba(0, 0, 0, 0.35) !important;
+        border-radius: 8px !important;
+        border: 1px solid rgba(212, 175, 112, 0.15) !important;
+        word-break: break-word !important;
+        overflow-wrap: break-word !important;
+        min-width: 0 !important;
+      }
+      .tropical-stat-icon {
+        font-size: 14px;
+        margin-bottom: 2px;
+      }
+
+      /* Narrow Screen Fallback for Stats */
+      @media (max-width: 360px) {
+        .tropical-badge-large {
+          grid-template-columns: 1fr !important;
+          gap: 6px !important;
+        }
+        .tropical-stat-item {
+          padding: 9px 8px !important;
+          flex-direction: row !important;
+          gap: 8px !important;
+        }
+        .tropical-stat-icon {
+          margin-bottom: 0 !important;
+        }
+      }
+
+      /* ==================================================
+         MYOP CONFIGURATOR MOBILE REBUILD (ULTRA-COMPACT)
+         ================================================== */
+      .myop-studio-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 14px !important;
+        width: 100% !important;
+      }
+
+      /* 1. Mobile Stepper */
+      .studio-stepper-nav {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        flex-wrap: nowrap !important;
+        gap: 4px !important;
+        padding: 0 0 10px 0 !important;
+        margin-bottom: 12px !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+        width: 100% !important;
+        scrollbar-width: none !important;
+      }
+      .studio-stepper-nav::-webkit-scrollbar {
+        display: none !important;
+      }
+      .studio-step-tab {
+        flex: 1 1 0 !important;
+        padding: 6px 2px !important;
+        font-size: 10px !important;
+        letter-spacing: 0.05em !important;
+        text-transform: uppercase !important;
+        font-weight: 600 !important;
+        border-radius: 6px !important;
+        text-align: center !important;
+        white-space: nowrap !important;
+        border: 1px solid rgba(255, 255, 255, 0.06) !important;
+        background: rgba(255, 255, 255, 0.03) !important;
+        color: rgba(255, 255, 255, 0.55) !important;
+      }
+      .studio-step-tab.active {
+        color: var(--gold) !important;
+        background: rgba(212, 175, 112, 0.12) !important;
+        border-color: rgba(212, 175, 112, 0.4) !important;
+        box-shadow: 0 0 10px rgba(212, 175, 112, 0.18) !important;
+      }
+      .studio-step-tab.active::after {
+        display: none !important;
+      }
+      .step-label-full { display: none !important; }
+      .step-label-compact { display: inline-flex !important; align-items: center; justify-content: center; gap: 2px; }
+      .step-label-mini { display: none !important; }
+      .step-circle { font-size: 10px; margin-right: 1px; color: var(--gold); }
+
+      /* 2. Section Title */
+      .studio-section-title-wrap {
+        margin-bottom: 12px !important;
+      }
+      .studio-section-title,
+      .custom-field-label {
+        font-family: var(--heading-font) !important;
+        font-size: 17px !important;
+        line-height: 1.2 !important;
+        color: #fff !important;
+        display: block !important;
+        margin-bottom: 12px !important;
+        font-weight: 500 !important;
+        text-align: left !important;
+      }
+
+      /* 3 & 4. Flacon Size Cards & Popular Badge */
+      .flacon-picker-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 7px !important;
+        margin-bottom: 14px !important;
+        width: 100% !important;
+      }
+      .flacon-choice-card {
+        height: 114px !important;
+        min-height: 105px !important;
+        max-height: 120px !important;
+        padding: 8px 4px !important;
+        border-radius: 10px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        text-align: center !important;
+        position: relative !important;
+        box-sizing: border-box !important;
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      }
+      .flacon-choice-card.selected {
+        border-color: var(--gold) !important;
+        background: rgba(212, 175, 112, 0.09) !important;
+        box-shadow: 0 0 14px rgba(212, 175, 112, 0.22) !important;
+      }
+      .flacon-choice-card.selected::before {
+        display: none !important;
+      }
+      .flacon-icon-svg {
+        width: 20px !important;
+        height: 26px !important;
+        margin: 0 auto 2px auto !important;
+        color: var(--gold) !important;
+      }
+      .flacon-size-title {
+        font-family: var(--heading-font) !important;
+        font-size: 0.95rem !important;
+        line-height: 1.1 !important;
+        color: #fff !important;
+        margin-bottom: 1px !important;
+        font-weight: 600 !important;
+      }
+      .flacon-size-desc {
+        font-size: 0.65rem !important;
+        color: var(--muted-color) !important;
+        line-height: 1.1 !important;
+        margin-bottom: 2px !important;
+      }
+      .desc-full { display: none !important; }
+      .desc-short { display: inline !important; }
+      .flacon-size-price {
+        font-family: var(--nav-font) !important;
+        font-size: 0.85rem !important;
+        font-weight: 700 !important;
+        color: var(--gold) !important;
+        line-height: 1.1 !important;
+      }
+      .flacon-popular-badge {
+        font-size: 7.5px !important;
+        line-height: 1 !important;
+        font-weight: 800 !important;
+        padding: 2.5px 4px !important;
+        border-radius: 4px !important;
+        top: 4px !important;
+        right: 4px !important;
+        left: auto !important;
+        transform: none !important;
+        letter-spacing: 0.04em !important;
+        white-space: nowrap !important;
+        background: var(--gold) !important;
+        color: #000 !important;
+      }
+      .pop-full { display: none !important; }
+      .pop-short { display: inline !important; }
+
+      /* 5. Flacon Cap & Collar Finish */
+      .finish-selector-row {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 7px !important;
+        margin-top: 8px !important;
+        margin-bottom: 14px !important;
+        width: 100% !important;
+      }
+      .finish-pill-btn {
+        height: 52px !important;
+        min-height: 48px !important;
+        max-height: 58px !important;
+        padding: 6px 3px !important;
+        border-radius: 8px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        gap: 4px !important;
+        font-size: 10px !important;
+        line-height: 1.15 !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        background: rgba(255, 255, 255, 0.04) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        color: rgba(255, 255, 255, 0.85) !important;
+      }
+      .finish-pill-btn.selected {
+        border-color: var(--gold) !important;
+        background: rgba(212, 175, 112, 0.12) !important;
+        color: #fff !important;
+        box-shadow: 0 0 10px rgba(212, 175, 112, 0.18) !important;
+      }
+      .finish-text-desktop { display: none !important; }
+      .finish-text-mobile { display: block !important; }
+      .finish-dot {
+        width: 9px !important;
+        height: 9px !important;
+        margin: 0 auto !important;
+        border-radius: 50% !important;
+        flex-shrink: 0 !important;
+      }
+
+      /* 6. Compact Next Button */
+      .studio-next-step-btn {
+        height: 46px !important;
+        min-height: 44px !important;
+        max-height: 48px !important;
+        font-size: 12px !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.07em !important;
+        border-radius: 10px !important;
+        margin-top: 14px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        background: rgba(212, 175, 112, 0.14) !important;
+        border: 1px solid var(--gold) !important;
+        color: var(--gold-light) !important;
+        text-transform: uppercase !important;
+      }
+      .btn-text-desktop { display: none !important; }
+      .btn-text-mobile { display: inline !important; }
+
+      /* Studio Panel Container Polish */
+      .studio-panel {
+        padding: 16px 12px !important;
+        border-radius: 14px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        background: rgba(18, 18, 18, 0.75) !important;
+      }
+
+      /* Studio Other Steps Compact */
+      .oils-selector-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 6px !important;
+        max-height: 240px !important;
+        padding-right: 2px !important;
+      }
+      .oil-card {
+        padding: 8px 6px !important;
+        border-radius: 8px !important;
+      }
+      .oil-origin-label {
+        font-size: 0.58rem !important;
+        margin-bottom: 2px !important;
+      }
+      .oil-card-title {
+        font-size: 0.82rem !important;
+        margin-bottom: 2px !important;
+      }
+      .oil-card-desc {
+        display: none !important;
+      }
+      .oil-tag-pill {
+        font-size: 0.6rem !important;
+        padding: 2px 6px !important;
+      }
+      .heart-notes-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 6px !important;
+        max-height: 240px !important;
+        overflow-y: auto !important;
+      }
+      .heart-note-pill {
+        padding: 6px 4px !important;
+        border-radius: 6px !important;
+      }
+      .heart-note-icon {
+        font-size: 0.95rem !important;
+        margin-bottom: 2px !important;
+      }
+      .heart-note-name {
+        font-size: 0.72rem !important;
+      }
+      .heart-note-family {
+        font-size: 0.58rem !important;
+      }
+      .ratio-slider-box {
+        padding: 12px 10px !important;
+        margin-bottom: 12px !important;
+      }
+      .ratio-labels-row {
+        flex-direction: column !important;
+        gap: 4px !important;
+        font-size: 0.75rem !important;
+      }
+      .ratio-breakdown-metrics {
+        gap: 6px !important;
+      }
+      .metric-item-val {
+        font-size: 0.95rem !important;
+      }
+      .metric-item-lbl {
+        font-size: 0.62rem !important;
+      }
+      .oil-guarantee-card {
+        padding: 10px !important;
+        gap: 10px !important;
+      }
+      .oil-guarantee-info h4 {
+        font-size: 0.8rem !important;
+      }
+      .oil-guarantee-info p {
+        font-size: 0.7rem !important;
+        line-height: 1.35 !important;
+      }
+
+      /* ==================================================
+         7, 8, 9, 10, 11, 12 & 13. COMPACT SUMMARY CARD
+         ================================================== */
+      .flacon-visualizer-sticky {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 16px 12px !important;
+        border-radius: 14px !important;
+        margin-top: 0 !important;
+        position: static !important;
+        background: rgba(18, 18, 18, 0.75) !important;
+        border: 1px solid rgba(212, 175, 112, 0.22) !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+      }
+      .batch-id-chip {
+        font-size: 9px !important;
+        letter-spacing: 0.12em !important;
+        padding: 2.5px 7px !important;
+        border-radius: 4px !important;
+        margin: 0 auto 5px auto !important;
+        color: var(--gold-light) !important;
+        background: rgba(212, 175, 112, 0.12) !important;
+        border: 1px solid rgba(212, 175, 112, 0.25) !important;
+      }
+      .batch-desktop { display: none !important; }
+      .batch-mobile { display: inline !important; }
+      .visualizer-blend-title {
+        font-family: var(--heading-font) !important;
+        font-size: 25px !important;
+        line-height: 1.15 !important;
+        color: #fff !important;
+        margin: 0 auto 4px auto !important;
+        text-align: center !important;
+        font-weight: 500 !important;
+      }
+      .visualizer-flacon-tag {
+        font-size: 11px !important;
+        color: var(--gold) !important;
+        letter-spacing: 0.08em !important;
+        text-transform: uppercase !important;
+        margin: 0 auto 10px auto !important;
+        text-align: center !important;
+        font-family: var(--nav-font) !important;
+      }
+      .tag-desktop { display: none !important; }
+      .tag-mobile { display: inline !important; }
+
+      /* Bottle Image Stage (Centered, Not Cropped, 110-150px W, 150-190px H) */
+      .flacon-visualizer-glass {
+        width: 125px !important;
+        height: 165px !important;
+        min-height: 150px !important;
+        max-height: 185px !important;
+        margin: 4px auto 12px auto !important;
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      .flacon-rendered-bottle {
+        width: 100% !important;
+        max-width: 125px !important;
+        height: 100% !important;
+        max-height: 165px !important;
+        object-fit: contain !important;
+        margin: 0 auto !important;
+        display: block !important;
+      }
+
+      /* Compact 2-Column Summary Details Grid */
+      .formula-breakdown-card {
+        width: 100% !important;
+        padding: 10px 12px !important;
+        margin: 0 auto 12px auto !important;
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 10px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 6px !important;
+        box-sizing: border-box !important;
+      }
+      .formula-row {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 2px 0 !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
+      }
+      .formula-row:last-child {
+        border-bottom: none !important;
+      }
+      .formula-lbl {
+        font-family: var(--nav-font) !important;
+        font-size: 11px !important;
+        line-height: 1.3 !important;
+        color: var(--gold-light) !important;
+        opacity: 0.85 !important;
+        text-align: left !important;
+      }
+      .formula-val {
+        font-size: 11px !important;
+        line-height: 1.3 !important;
+        color: #fff !important;
+        font-weight: 600 !important;
+        text-align: right !important;
+      }
+
+      /* Compact Price Row */
+      .custom-blend-price-row {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+        margin-bottom: 12px !important;
+        padding: 0 4px !important;
+        box-sizing: border-box !important;
+      }
+      .custom-blend-price-label {
+        font-size: 10px !important;
+        color: var(--muted-color) !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.06em !important;
+        margin-bottom: 2px !important;
+        display: block !important;
+        text-align: left !important;
+      }
+      .custom-blend-price {
+        font-size: 26px !important;
+        line-height: 1.1 !important;
+        font-weight: 700 !important;
+        color: var(--gold) !important;
+        font-family: var(--heading-font) !important;
+        display: block !important;
+        text-align: left !important;
+      }
+      .custom-blend-oil-tag {
+        font-size: 9.5px !important;
+        padding: 5px 9px !important;
+        border-radius: 20px !important;
+        background: rgba(212, 175, 112, 0.14) !important;
+        border: 1px solid rgba(212, 175, 112, 0.35) !important;
+        color: var(--gold-light) !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.04em !important;
+        white-space: nowrap !important;
+        display: inline-block !important;
+      }
+
+      /* Compact Add to Bag Button */
+      .studio-add-to-bag-btn {
+        height: 46px !important;
+        min-height: 44px !important;
+        max-height: 48px !important;
+        font-size: 12px !important;
+        letter-spacing: 0.08em !important;
+        border-radius: 10px !important;
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: linear-gradient(135deg, #d4af70 0%, #ead7a6 50%, #c49950 100%) !important;
+        color: #070707 !important;
+        font-weight: 700 !important;
+        box-shadow: 0 4px 18px rgba(212, 175, 112, 0.35) !important;
+        border: none !important;
+        box-sizing: border-box !important;
+      }
+
+      /* Small Screens <= 360px refinement */
+      @media (max-width: 360px) {
+        .step-label-compact { display: none !important; }
+        .step-label-mini { display: inline !important; font-size: 9px !important; }
+        .studio-step-tab { padding: 5px 2px !important; font-size: 9px !important; }
+        .flacon-choice-card { height: 108px !important; padding: 6px 2px !important; }
+        .flacon-size-title { font-size: 0.88rem !important; }
+        .flacon-size-price { font-size: 0.8rem !important; }
+        .finish-pill-btn { height: 48px !important; font-size: 9px !important; }
+        .visualizer-blend-title { font-size: 22px !important; }
+        .flacon-visualizer-glass { width: 115px !important; height: 152px !important; }
+        .flacon-rendered-bottle { max-width: 115px !important; max-height: 152px !important; }
+        .custom-blend-price { font-size: 24px !important; }
+        .oils-selector-grid { grid-template-columns: 1fr !important; }
+      }
+
+      /* ==================================================
+         4, 5 & 6. DISCOVERY SETS HORIZONTAL SWIPEABLE CAROUSEL
+         ================================================== */
+      .discovery-section {
+        padding: 3.5rem 0 4rem 0 !important;
+        overflow-x: hidden !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      .discovery-section .section-header {
+        padding: 0 20px !important;
+        margin-bottom: 1.5rem !important;
+      }
+      .discovery-grid,
+      .discovery-sets-grid {
+        display: flex !important;
+        grid-template-columns: none !important;
+        gap: 14px !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        padding: 10px 20px 24px 20px !important;
+        scroll-snap-type: x mandatory !important;
+        -webkit-overflow-scrolling: touch !important;
+        margin-top: 1.5rem !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        scrollbar-width: none !important;
+      }
+      .discovery-grid::-webkit-scrollbar,
+      .discovery-sets-grid::-webkit-scrollbar {
+        display: none !important;
+      }
+      .discovery-card {
+        flex: 0 0 78% !important;
+        min-width: 250px !important;
+        max-width: 300px !important;
+        scroll-snap-align: center !important;
+        border-radius: 16px !important;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(18, 22, 32, 0.95) 100%) !important;
+        border: 1px solid rgba(212, 175, 112, 0.25) !important;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7) !important;
+        box-sizing: border-box !important;
+      }
+      /* Bottle Media Container & Contain Fit (No crop, no distortion) */
+      .discovery-img-wrap,
+      .discovery-card-media {
+        width: 100% !important;
+        height: 220px !important;
+        padding: 12px !important;
+        background: radial-gradient(circle at center, rgba(35, 28, 20, 0.7) 0%, #080c14 85%) !important;
+        position: relative !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        overflow: hidden !important;
+      }
+      .discovery-img,
+      .discovery-card-media img {
+        width: 100% !important;
+        height: 100% !important;
+        max-height: 192px !important;
+        object-fit: contain !important;
+        object-position: center !important;
+      }
+      /* Cash-Back Badge: Repositioned inside, smaller, non-overlapping */
+      .cashback-badge,
+      .cashback-banner-tag {
+        top: 10px !important;
+        left: 10px !important;
+        font-size: 0.58rem !important;
+        letter-spacing: 0.06em !important;
+        padding: 4px 8px !important;
+        font-weight: 800 !important;
+        border-radius: 6px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.75) !important;
+        max-width: calc(100% - 20px) !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        pointer-events: none !important;
+        z-index: 3 !important;
+      }
+      .discovery-body,
+      .discovery-card-body {
+        padding: 1.25rem 1.1rem !important;
+        display: flex !important;
+        flex-direction: column !important;
+        flex: 1 !important;
+      }
+      .discovery-title,
+      .discovery-card-title {
+        font-size: 1.22rem !important;
+        margin-bottom: 0.45rem !important;
+        line-height: 1.28 !important;
+      }
+      .discovery-desc,
+      .discovery-card-desc {
+        font-size: 0.8rem !important;
+        line-height: 1.5 !important;
+        margin-bottom: 1.1rem !important;
+      }
+      .vials-row,
+      .vials-included-list {
+        padding: 8px 10px !important;
+        gap: 5px !important;
+        margin-bottom: 1.2rem !important;
+      }
+      .vial-pill {
+        font-size: 0.68rem !important;
+        padding: 3px 8px !important;
+        white-space: normal !important;
+      }
+      .discovery-price-row {
+        margin-top: auto !important;
+        padding-top: 0.85rem !important;
+      }
+      .discovery-price {
+        font-size: 1.3rem !important;
+      }
+
+      /* Deals & Stores Grids Mobile Polish */
       .deals-grid,
       .stores-cards-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
+        gap: 1.25rem !important;
+      }
+      .deal-card,
+      .store-card {
+        padding: 1.5rem 1.15rem !important;
+        border-radius: 14px !important;
+        box-sizing: border-box !important;
       }
       .personalise-studio-card {
         padding: 2rem 1.25rem;
       }
-      .myop-hero-banner {
-        flex-direction: column;
-        text-align: center;
-        padding: 2rem 1.5rem;
+
+      /* Catalog Compare Banner Mobile */
+      .catalog-compare-banner {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        padding: 12px 16px !important;
+        gap: 12px !important;
       }
+      .compare-banner-btn {
+        width: 100% !important;
+        text-align: center !important;
+      }
+
+      /* Refill & Corporate Mobile */
+      .refill-card-wrap {
+        padding: 2rem 1.15rem !important;
+      }
+      .corporate-form-panel {
+        padding: 1.75rem 1.15rem !important;
+      }
+      .corp-input-row {
+        grid-template-columns: 1fr !important;
+        gap: 0.8rem !important;
+      }
+
+      /* Footer Mobile Polish */
+      .footer {
+        padding: 3.5rem 1rem 2rem 1rem !important;
+      }
+      .footer-top-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+      }
+      .newsletter-form {
+        max-width: 100% !important;
+      }
+
+      /* Floating Compare Tray Mobile */
       .floating-compare-tray {
         flex-direction: column;
         border-radius: 20px;
@@ -6025,8 +7035,9 @@
   <div class="custom-cursor" id="custom-cursor"></div>
   <div class="custom-cursor-follower" id="custom-cursor-follower"></div>
 
-  <!-- Dynamic Atmospheric Background & Canvas Particles -->
-  <div id="bg-layer"></div>
+  <!-- Global Whole-Website Perfume Atmospheric Background Layers -->
+  <div id="global-bg-layer-1" class="global-perfume-bg"></div>
+  <div id="global-bg-layer-2" class="global-perfume-bg" style="opacity: 0;"></div>
   <canvas id="particles-canvas"></canvas>
 
   <!-- Luxury Header -->
@@ -6106,58 +7117,73 @@
 
   <main>
     <!-- 1. Hero Campaign Section (100% Full-Screen Edge-to-Edge Luxury Advertising Campaign) -->
-    <section class="hero-section hero-campaign" id="hero">
+    <section class="hero-section hero-campaign" id="hero" aria-label="Haute Parfumerie Hero">
       <!-- Ambient Backdrops (Two layers for smooth color blending) -->
       <div id="bg-layer-1" class="bg-layer-base"></div>
       <div id="bg-layer-2" class="bg-layer-transition" style="opacity: 0;"></div>
 
-      <!-- 100% Edge-to-Edge Perfume Photograph Stage (Full Viewport Cover, No Circles, Perfectly Fitted) -->
-      <div class="hero-backdrop-stage" id="hero-perfume-carousel-wrap">
-        <!-- Full-Screen Hero Image spanning edge to edge without overzooming -->
-        <img id="hero-campaign-full-img" class="hero-campaign-full-img" src="/hero_wide_p1.jpg" alt="ÉLIXORA Golden Elixir Eau de Parfum" />
-        <img id="hero-campaign-full-img-next" class="hero-campaign-full-img hero-campaign-full-img-next" src="" alt="" aria-hidden="true" />
+      <!-- Atmospheric Ambient Backdrop (blurred wide composition) -->
+      <div class="hero-ambient-backdrop">
+        <img id="hero-campaign-full-img" class="hero-ambient-img" src="/hero_wide_p1.jpg" alt="" aria-hidden="true" />
+        <img id="hero-campaign-full-img-next" class="hero-ambient-img hero-ambient-img-next" src="" alt="" aria-hidden="true" />
       </div>
 
-      <!-- Subtle Directional Black-to-Transparent Gradient Behind Text -->
+      <!-- Directional Atmosphere Scrim -->
       <div class="hero-campaign-scrim"></div>
 
       <!-- Subtle Luxury Film Grain Texture -->
       <div class="luxury-grain-overlay"></div>
 
-      <!-- Campaign Product Text Overlay (Placed in the darker / negative space on the left) -->
-      <div class="hero-left hero-campaign-content">
-        <div class="eyebrow" id="hero-dynamic-brand">ÉLIXORA · LUXURY</div>
-        <h1 class="hero-heading" id="hero-dynamic-name">GOLDEN ELIXIR</h1>
-        <div class="hero-category-badge-wrap">
-          <span class="hero-category-badge" id="hero-dynamic-category">ORIENTAL</span>
-          <span class="hero-mood-badge" id="hero-dynamic-mood">warm, luxurious, sensual</span>
+      <!-- Main Responsive Hero Stage Layout -->
+      <div class="hero-stage-layout" id="hero-perfume-carousel-wrap">
+        <!-- Text Column: High-end editorial typography -->
+        <div class="hero-text-col">
+          <div class="hero-brand-eyebrow" id="hero-dynamic-brand">ÉLIXORA · THE ART OF FRAGRANCE</div>
+          <h1 class="hero-heading" id="hero-dynamic-name">GOLDEN ELIXIR</h1>
+          <div class="hero-meta-row" id="hero-dynamic-meta">
+            <span class="hero-feel-val" id="hero-dynamic-mood">Warm &amp; Sensual</span>
+            <span class="hero-meta-sep">·</span>
+            <span class="hero-family-val" id="hero-dynamic-category">ORIENTAL EXTRAIT</span>
+          </div>
+          <p class="hero-tagline" id="hero-dynamic-desc">
+            An opulent stream of golden amber, warm cashmeran woods, and honeyed saffron threads, radiating an irresistible, seductive warmth.
+          </p>
+          <div class="hero-notes-strip" id="hero-dynamic-notes-wrap">
+            <span class="notes-kicker">Signature Notes:</span>
+            <span class="notes-content" id="hero-dynamic-notes">Saffron · Molten Honey · Aged Oud</span>
+          </div>
+          <div class="hero-actions">
+            <button class="primary-btn hero-primary-btn" id="hero-discover-btn">
+              <span>DISCOVER FRAGRANCE</span>
+              <span>+</span>
+            </button>
+            <button class="secondary-btn hero-secondary-btn" id="release-scent-btn" title="Release signature olfactory notes">
+              <span>✦ EXPERIENCE AURA</span>
+            </button>
+          </div>
         </div>
-        <p class="hero-tagline" id="hero-dynamic-desc">
-          An opulent stream of golden amber, warm cashmeran woods, and honeyed saffron threads, radiating an irresistible, seductive warmth.
-        </p>
-        <div class="hero-actions">
-          <button class="primary-btn" id="hero-discover-btn">
-            DISCOVER FRAGRANCE
-            <span>+</span>
-          </button>
+
+        <!-- Open Stage Column for Full-Bleed Perfume Photography -->
+        <div class="hero-bottle-col">
+          <div class="hero-flacon-stage" id="hero-flacon-stage" title="Click to experience fragrance aura burst">
+            <div class="hero-flacon-aura" id="hero-flacon-aura"></div>
+          </div>
         </div>
       </div>
 
-      <!-- Left Side Corner Arrow Navigation -->
-      <button class="hero-edge-nav-btn hero-edge-prev" id="hero-carousel-prev-btn" aria-label="Previous Fragrance" title="Previous Fragrance">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Left Side Floating Arrow Navigation -->
+      <button class="hero-edge-nav-btn hero-edge-prev" id="hero-carousel-prev-btn" aria-label="Previous Fragrance" title="Previous Fragrance (Left Arrow Key)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="15 18 9 12 15 6"></polyline>
         </svg>
       </button>
 
-      <!-- Right Side Corner Arrow Navigation -->
-      <button class="hero-edge-nav-btn hero-edge-next" id="hero-carousel-next-btn" aria-label="Next Fragrance" title="Next Fragrance">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Right Side Floating Arrow Navigation -->
+      <button class="hero-edge-nav-btn hero-edge-next" id="hero-carousel-next-btn" aria-label="Next Fragrance" title="Next Fragrance (Right Arrow Key)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="9 18 15 12 9 6"></polyline>
         </svg>
       </button>
-
-
 
       <!-- Hidden container to retain data-theme pill elements for existing JS selectors -->
       <div class="theme-morph-bar" style="display: none !important;" aria-hidden="true">
@@ -6199,7 +7225,11 @@
             Why wear someone else's formula when you can author your own? Blend hand-selected European botanical oils with India's highest 50% oil concentration for an extraordinary 18–24 hour projection in tropical climates.
           </p>
           <div class="tropical-badge-large">
-            <span>&#9889; 50% High Oil Concentration</span> &middot; <span>24H Tropical Heat Endurance</span> &middot; <span>Free Laser Engraving</span>
+            <span class="tropical-stat-item"><span class="tropical-stat-icon">&#9889;</span> 50% High Oil Concentration</span>
+            <span class="tropical-badge-sep">&middot;</span>
+            <span class="tropical-stat-item"><span class="tropical-stat-icon">&#128337;</span> 24H Tropical Heat Endurance</span>
+            <span class="tropical-badge-sep">&middot;</span>
+            <span class="tropical-stat-item"><span class="tropical-stat-icon">&#10022;</span> Free Laser Engraving</span>
           </div>
         </div>
       </div>
@@ -6209,17 +7239,37 @@
         <div class="studio-panel">
           <!-- Stepper Navigation Tabs -->
           <div class="studio-stepper-nav" id="studio-stepper-nav">
-            <button class="studio-step-tab active" onclick="switchStudioStep(1)">1. Flacon &amp; Size</button>
-            <button class="studio-step-tab" onclick="switchStudioStep(2)">2. Base Oil (50%)</button>
-            <button class="studio-step-tab" onclick="switchStudioStep(3)">3. Heart &amp; Accents</button>
-            <button class="studio-step-tab" onclick="switchStudioStep(4)">4. Blending Ratio</button>
-            <button class="studio-step-tab" onclick="switchStudioStep(5)">5. Name &amp; Engrave</button>
+            <button class="studio-step-tab active" onclick="switchStudioStep(1)">
+              <span class="step-label-full">1. Flacon &amp; Size</span>
+              <span class="step-label-compact"><span class="step-circle">①</span> Flacon</span>
+              <span class="step-label-mini">Flacon</span>
+            </button>
+            <button class="studio-step-tab" onclick="switchStudioStep(2)">
+              <span class="step-label-full">2. Base Oil (50%)</span>
+              <span class="step-label-compact"><span class="step-circle">②</span> Oil</span>
+              <span class="step-label-mini">Oil</span>
+            </button>
+            <button class="studio-step-tab" onclick="switchStudioStep(3)">
+              <span class="step-label-full">3. Heart &amp; Accents</span>
+              <span class="step-label-compact"><span class="step-circle">③</span> Heart</span>
+              <span class="step-label-mini">Heart</span>
+            </button>
+            <button class="studio-step-tab" onclick="switchStudioStep(4)">
+              <span class="step-label-full">4. Blending Ratio</span>
+              <span class="step-label-compact"><span class="step-circle">④</span> Ratio</span>
+              <span class="step-label-mini">Ratio</span>
+            </button>
+            <button class="studio-step-tab" onclick="switchStudioStep(5)">
+              <span class="step-label-full">5. Name &amp; Engrave</span>
+              <span class="step-label-compact"><span class="step-circle">⑤</span> Engrave</span>
+              <span class="step-label-mini">Engrave</span>
+            </button>
           </div>
 
           <!-- Step 1: Flacon & Size -->
           <div class="studio-step-content" id="studio-step-pane-1">
-            <div style="margin-bottom: 1rem;">
-              <span class="custom-field-label">Select Flacon Architecture &amp; Volume:</span>
+            <div class="studio-section-title-wrap">
+              <span class="custom-field-label studio-section-title">Select Flacon Architecture &amp; Volume:</span>
             </div>
             <div class="flacon-picker-grid">
               <div class="flacon-choice-card" onclick="selectStudioFlacon('50ml', 1499, this)">
@@ -6228,18 +7278,27 @@
                   <path d="M5 8h14v22a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8z"></path>
                 </svg>
                 <div class="flacon-size-title">50ml</div>
-                <div class="flacon-size-desc">Pocket &middot; Travel Ready</div>
+                <div class="flacon-size-desc">
+                  <span class="desc-full">Pocket &middot; Travel Ready</span>
+                  <span class="desc-short">Pocket</span>
+                </div>
                 <div class="flacon-size-price">₹1,499</div>
               </div>
 
               <div class="flacon-choice-card selected" onclick="selectStudioFlacon('100ml', 2499, this)">
-                <span class="flacon-popular-badge">MOST POPULAR</span>
+                <span class="flacon-popular-badge">
+                  <span class="pop-full">MOST POPULAR</span>
+                  <span class="pop-short">POPULAR</span>
+                </span>
                 <svg class="flacon-icon-svg" viewBox="0 0 24 34" fill="none" stroke="currentColor" stroke-width="1.8">
                   <rect x="6" y="2" width="12" height="6" rx="1"></rect>
                   <path d="M4 8h16v23a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8z"></path>
                 </svg>
                 <div class="flacon-size-title">100ml</div>
-                <div class="flacon-size-desc">Signature &middot; Master Decanter</div>
+                <div class="flacon-size-desc">
+                  <span class="desc-full">Signature &middot; Master Decanter</span>
+                  <span class="desc-short">Signature</span>
+                </div>
                 <div class="flacon-size-price">₹2,499</div>
               </div>
 
@@ -6249,27 +7308,39 @@
                   <path d="M3 8h18v24a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8z"></path>
                 </svg>
                 <div class="flacon-size-title">120ml</div>
-                <div class="flacon-size-desc">Grand Decanter &middot; Collector</div>
+                <div class="flacon-size-desc">
+                  <span class="desc-full">Grand Decanter &middot; Collector</span>
+                  <span class="desc-short">Grand</span>
+                </div>
                 <div class="flacon-size-price">₹3,199</div>
               </div>
             </div>
 
             <!-- Flacon Finish -->
-            <span class="custom-field-label">Flacon Cap &amp; Collar Finish:</span>
+            <div class="studio-section-title-wrap">
+              <span class="custom-field-label studio-section-title">Flacon Cap &amp; Collar Finish:</span>
+            </div>
             <div class="finish-selector-row">
               <button class="finish-pill-btn selected" onclick="selectStudioFinish('Obsidian Noir', '#1a1a1a', this)">
-                <span class="finish-dot" style="background: #111;"></span> Obsidian Noir
+                <span class="finish-dot" style="background: #111;"></span>
+                <span class="finish-text-desktop">Obsidian Noir</span>
+                <span class="finish-text-mobile">Obsidian<br>Noir</span>
               </button>
               <button class="finish-pill-btn" onclick="selectStudioFinish('Champagne Gold', '#d4af70', this)">
-                <span class="finish-dot" style="background: #d4af70;"></span> 24K Champagne Gold
+                <span class="finish-dot" style="background: #d4af70;"></span>
+                <span class="finish-text-desktop">24K Champagne Gold</span>
+                <span class="finish-text-mobile">Champagne<br>Gold</span>
               </button>
               <button class="finish-pill-btn" onclick="selectStudioFinish('Platinum Silver', '#e2e8f0', this)">
-                <span class="finish-dot" style="background: #e2e8f0;"></span> Platinum Silver
+                <span class="finish-dot" style="background: #e2e8f0;"></span>
+                <span class="finish-text-desktop">Platinum Silver</span>
+                <span class="finish-text-mobile">Platinum<br>Silver</span>
               </button>
             </div>
 
-            <button class="secondary-btn" style="margin-top: 2rem; width: 100%;" onclick="switchStudioStep(2)">
-              Next: Select Base Oil (50%) &rarr;
+            <button class="secondary-btn studio-next-step-btn" style="margin-top: 1.5rem; width: 100%;" onclick="switchStudioStep(2)">
+              <span class="btn-text-desktop">Next: Select Base Oil (50%) &rarr;</span>
+              <span class="btn-text-mobile">NEXT &middot; SELECT BASE OIL &rarr;</span>
             </button>
           </div>
 
@@ -6449,12 +7520,16 @@
 
         <!-- Studio Right: Sticky Flacon Live Visualizer -->
         <div class="flacon-visualizer-sticky">
-          <span class="batch-id-chip" id="custom-formula-batch-code">#MYOP-8492-GRASSE</span>
-          <h3 style="font-family: var(--heading-font); font-size: 1.6rem; color: #fff; margin: 0.6rem 0 0.3rem 0;" id="visualizer-blend-name">
+          <span class="batch-id-chip" id="custom-formula-batch-code">
+            <span class="batch-desktop">#MYOP-8492-GRASSE</span>
+            <span class="batch-mobile">MYOP-8492-GRASSE</span>
+          </span>
+          <h3 id="visualizer-blend-name" class="visualizer-blend-title">
             Aura Sovereign
           </h3>
-          <p style="font-size: 0.75rem; color: var(--gold); letter-spacing: 0.08em; text-transform: uppercase;" id="visualizer-flacon-tag">
-            100ml Extrait de Parfum &middot; 50% Oil
+          <p id="visualizer-flacon-tag" class="visualizer-flacon-tag">
+            <span class="tag-desktop">100ml Extrait de Parfum &middot; 50% Oil</span>
+            <span class="tag-mobile">100ml Extrait &middot; 50% Oil</span>
           </p>
 
           <!-- Bottle Graphic Stage with Dynamic Tint -->
@@ -6469,33 +7544,33 @@
           <!-- Formula Summary Card -->
           <div class="formula-breakdown-card">
             <div class="formula-row">
-              <span>Flacon Size:</span>
-              <strong id="card-size-label">100ml Decanter</strong>
+              <span class="formula-lbl">Flacon</span>
+              <strong class="formula-val" id="card-size-label">100ml Decanter</strong>
             </div>
             <div class="formula-row">
-              <span>Base Essence (50%):</span>
-              <strong id="card-base-label">Mysore Sandalwood</strong>
+              <span class="formula-lbl">Base Oil</span>
+              <strong class="formula-val" id="card-base-label">Mysore Sandalwood</strong>
             </div>
             <div class="formula-row">
-              <span>Heart &amp; Accents:</span>
-              <strong id="card-heart-label">Grasse Rose Centifolia</strong>
+              <span class="formula-lbl">Heart</span>
+              <strong class="formula-val" id="card-heart-label">Grasse Rose Centifolia</strong>
             </div>
             <div class="formula-row">
-              <span>Ratio:</span>
-              <strong id="card-ratio-label">60% Base / 40% Heart</strong>
+              <span class="formula-lbl">Ratio</span>
+              <strong class="formula-val" id="card-ratio-label">60% Base / 40% Heart</strong>
             </div>
           </div>
 
           <div class="custom-blend-price-row">
             <div>
-              <span style="font-size: 0.72rem; color: var(--muted-color); display: block;">Total All-Inclusive:</span>
+              <span class="custom-blend-price-label">Total All-Inclusive:</span>
               <span class="custom-blend-price" id="studio-price-val">₹2,499</span>
             </div>
             <span class="custom-blend-oil-tag">✓ 50% Tropical Oil</span>
           </div>
 
-          <button class="primary-btn" style="width: 100%;" onclick="addCustomBlendToBag()">
-            ✦ ADD BESPOKE BLEND TO BAG &rarr;
+          <button class="primary-btn studio-add-to-bag-btn" style="width: 100%;" onclick="addCustomBlendToBag()">
+            ✦ ADD BESPOKE BLEND TO BAG
           </button>
         </div>
       </div>
@@ -6755,7 +7830,7 @@
 
       <div class="discovery-grid">
         <!-- Set 1 -->
-        <div class="discovery-card">
+        <div class="discovery-card" onmouseenter="if (window.innerWidth > 768) applyTheme('p1', false);">
           <div class="discovery-img-wrap">
             <img class="discovery-img" src="/golden_elixir.jpg" alt="The ÉLIXORA Flagship Golden Elixir Flacon" />
             <span class="cashback-badge">&#10022; 100% CASH-BACK VOUCHER</span>
@@ -6767,11 +7842,11 @@
               Experience ÉLIXORA's 5 most celebrated award-winning creations: Golden Elixir, Azure Mist, Rose Éclat, Noir Intense, and Rouge Passion.
             </p>
             <div class="vials-row">
-              <span class="vial-pill" onclick="openProductModal('p1')" style="cursor: pointer;" title="Explore Golden Elixir">5ml Golden Elixir</span>
-              <span class="vial-pill" onclick="openProductModal('p2')" style="cursor: pointer;" title="Explore Azure Mist">5ml Azure Mist</span>
-              <span class="vial-pill" onclick="openProductModal('p3')" style="cursor: pointer;" title="Explore Rose Éclat">5ml Rose Éclat</span>
-              <span class="vial-pill" onclick="openProductModal('p4')" style="cursor: pointer;" title="Explore Noir Intense">5ml Noir Intense</span>
-              <span class="vial-pill" onclick="openProductModal('p8')" style="cursor: pointer;" title="Explore Rouge Passion">5ml Rouge Passion</span>
+              <span class="vial-pill" onmouseenter="applyTheme('p1', false)" onclick="applyTheme('p1', false); openProductModal('p1')" style="cursor: pointer;" title="Explore Golden Elixir">5ml Golden Elixir</span>
+              <span class="vial-pill" onmouseenter="applyTheme('p2', false)" onclick="applyTheme('p2', false); openProductModal('p2')" style="cursor: pointer;" title="Explore Azure Mist">5ml Azure Mist</span>
+              <span class="vial-pill" onmouseenter="applyTheme('p3', false)" onclick="applyTheme('p3', false); openProductModal('p3')" style="cursor: pointer;" title="Explore Rose Éclat">5ml Rose Éclat</span>
+              <span class="vial-pill" onmouseenter="applyTheme('p4', false)" onclick="applyTheme('p4', false); openProductModal('p4')" style="cursor: pointer;" title="Explore Noir Intense">5ml Noir Intense</span>
+              <span class="vial-pill" onmouseenter="applyTheme('p8', false)" onclick="applyTheme('p8', false); openProductModal('p8')" style="cursor: pointer;" title="Explore Rouge Passion">5ml Rouge Passion</span>
             </div>
             <div class="discovery-price-row">
               <div>
@@ -6786,7 +7861,7 @@
         </div>
 
         <!-- Set 2 -->
-        <div class="discovery-card">
+        <div class="discovery-card" onmouseenter="if (window.innerWidth > 768) applyTheme('p5', false);">
           <div class="discovery-img-wrap">
             <img class="discovery-img" src="/emerald_woods.jpg" alt="ÉLIXORA Woods &amp; Royal Orientals Emerald Flacon" />
             <span class="cashback-badge">&#10022; 100% CASH-BACK VOUCHER</span>
@@ -6798,11 +7873,11 @@
               For connoisseurs of profound depth and smoky resins: Emerald Woods, Green Oud, Desert Gold, Sapphire Noir, and Café Noir.
             </p>
             <div class="vials-row">
-              <span class="vial-pill" onclick="openProductModal('p5')" style="cursor: pointer;" title="Explore Emerald Woods">5ml Emerald Woods</span>
-              <span class="vial-pill" onclick="openProductModal('p11')" style="cursor: pointer;" title="Explore Green Oud">5ml Green Oud</span>
-              <span class="vial-pill" onclick="openProductModal('p13')" style="cursor: pointer;" title="Explore Desert Gold">5ml Desert Gold</span>
-              <span class="vial-pill" onclick="openProductModal('p14')" style="cursor: pointer;" title="Explore Sapphire Noir">5ml Sapphire Noir</span>
-              <span class="vial-pill" onclick="openProductModal('p20')" style="cursor: pointer;" title="Explore Café Noir">5ml Café Noir</span>
+              <span class="vial-pill" onmouseenter="applyTheme('p5', false)" onclick="applyTheme('p5', false); openProductModal('p5')" style="cursor: pointer;" title="Explore Emerald Woods">5ml Emerald Woods</span>
+              <span class="vial-pill" onmouseenter="applyTheme('p11', false)" onclick="applyTheme('p11', false); openProductModal('p11')" style="cursor: pointer;" title="Explore Green Oud">5ml Green Oud</span>
+              <span class="vial-pill" onmouseenter="applyTheme('p13', false)" onclick="applyTheme('p13', false); openProductModal('p13')" style="cursor: pointer;" title="Explore Desert Gold">5ml Desert Gold</span>
+              <span class="vial-pill" onmouseenter="applyTheme('p14', false)" onclick="applyTheme('p14', false); openProductModal('p14')" style="cursor: pointer;" title="Explore Sapphire Noir">5ml Sapphire Noir</span>
+              <span class="vial-pill" onmouseenter="applyTheme('p20', false)" onclick="applyTheme('p20', false); openProductModal('p20')" style="cursor: pointer;" title="Explore Café Noir">5ml Café Noir</span>
             </div>
             <div class="discovery-price-row">
               <div>
@@ -6817,7 +7892,7 @@
         </div>
 
         <!-- Set 3 -->
-        <div class="discovery-card">
+        <div class="discovery-card" onmouseenter="if (window.innerWidth > 768) applyTheme('p9', false);">
           <div class="discovery-img-wrap">
             <img class="discovery-img" src="/aqua_lumiere.jpg" alt="ÉLIXORA Luminous Florals &amp; Marine Aqua Flacon" />
             <span class="cashback-badge">&#10022; 100% CASH-BACK VOUCHER</span>
@@ -6829,11 +7904,11 @@
               Radiant sunlit botanicals and sparkling ocean tides: Aqua Lumière, Royal Amethyst, Pure Crystal, Coral Bliss, and Ocean Veil.
             </p>
             <div class="vials-row">
-              <span class="vial-pill" onclick="openProductModal('p9')" style="cursor: pointer;" title="Explore Aqua Lumière">5ml Aqua Lumière</span>
-              <span class="vial-pill" onclick="openProductModal('p6')" style="cursor: pointer;" title="Explore Royal Amethyst">5ml Royal Amethyst</span>
-              <span class="vial-pill" onclick="openProductModal('p7')" style="cursor: pointer;" title="Explore Pure Crystal">5ml Pure Crystal</span>
-              <span class="vial-pill" onclick="openProductModal('p17')" style="cursor: pointer;" title="Explore Coral Bliss">5ml Coral Bliss</span>
-              <span class="vial-pill" onclick="openProductModal('p19')" style="cursor: pointer;" title="Explore Ocean Veil">5ml Ocean Veil</span>
+              <span class="vial-pill" onmouseenter="applyTheme('p9', false)" onclick="applyTheme('p9', false); openProductModal('p9')" style="cursor: pointer;" title="Explore Aqua Lumière">5ml Aqua Lumière</span>
+              <span class="vial-pill" onmouseenter="applyTheme('p6', false)" onclick="applyTheme('p6', false); openProductModal('p6')" style="cursor: pointer;" title="Explore Royal Amethyst">5ml Royal Amethyst</span>
+              <span class="vial-pill" onmouseenter="applyTheme('p7', false)" onclick="applyTheme('p7', false); openProductModal('p7')" style="cursor: pointer;" title="Explore Pure Crystal">5ml Pure Crystal</span>
+              <span class="vial-pill" onmouseenter="applyTheme('p17', false)" onclick="applyTheme('p17', false); openProductModal('p17')" style="cursor: pointer;" title="Explore Coral Bliss">5ml Coral Bliss</span>
+              <span class="vial-pill" onmouseenter="applyTheme('p19', false)" onclick="applyTheme('p19', false); openProductModal('p19')" style="cursor: pointer;" title="Explore Ocean Veil">5ml Ocean Veil</span>
             </div>
             <div class="discovery-price-row">
               <div>
@@ -8372,7 +9447,7 @@
       {
         id: "p12",
         brand: "ÉLIXORA",
-        name: "Lavender Dream",
+        name: "Lavender Élégance",
         category: "FRESH",
         gender: "UNISEX",
         concentration: "Cologne Intense",
@@ -8758,10 +9833,11 @@
       releaseScentBtn.addEventListener("click", triggerScentBurst);
     }
 
-    // Make the luxury perfume stage clickable to trigger scent burst (only when not swiping)
-    if (heroPerfumeStage) {
-      heroPerfumeStage.style.cursor = "pointer";
-      heroPerfumeStage.addEventListener("click", (e) => {
+    // Make the luxury perfume bottle stage clickable to trigger scent burst (only when not swiping)
+    const heroFlaconStageEl = document.getElementById("hero-flacon-stage");
+    if (heroFlaconStageEl) {
+      heroFlaconStageEl.style.cursor = "pointer";
+      heroFlaconStageEl.addEventListener("click", (e) => {
         if (window.heroWasSwiped) return;
         triggerScentBurst();
       });
@@ -8770,145 +9846,451 @@
     // 7. Scent Themes & Background Morphing Engine
     const SCENT_THEMES = {
       noir: {
-        gradient: "radial-gradient(circle at 50% 45%, #182236 0%, #0d121c 40%, #080a0f 70%, #030305 100%)",
-        accent: "#a5b4fc",
-        glow: "rgba(165, 180, 252, 0.25)",
+        gradient: "radial-gradient(circle at 60% 45%, #25282e 0%, #121417 45%, #050608 80%, #000000 100%)",
+        accent: "#e2e8f0",
+        glow: "rgba(226, 232, 240, 0.4)",
         image: "/noir_intense.jpg",
         name: "Noir Intense"
       },
       rose: {
-        gradient: "radial-gradient(circle at 50% 45%, #5c1028 0%, #260711 40%, #100307 70%, #050305 100%)",
-        accent: "#fbcfe8",
-        glow: "rgba(251, 207, 232, 0.3)",
+        gradient: "radial-gradient(circle at 60% 45%, #6b1d3d 0%, #300818 45%, #0d0106 80%, #000000 100%)",
+        accent: "#f472b6",
+        glow: "rgba(244, 114, 182, 0.45)",
         image: "/rose_eclat.jpg",
         name: "Rose Éclat"
       },
       oud: {
-        gradient: "radial-gradient(circle at 50% 45%, #51301b 0%, #211208 40%, #100904 70%, #050302 100%)",
-        accent: "#ead7a6",
-        glow: "rgba(212, 175, 112, 0.35)",
+        gradient: "radial-gradient(circle at 60% 45%, #633f0c 0%, #2e1a03 45%, #080501 80%, #000000 100%)",
+        accent: "#D4AF37",
+        glow: "rgba(212, 175, 55, 0.45)",
         image: "/golden_elixir.jpg",
         name: "Golden Elixir"
       },
       aqua: {
-        gradient: "radial-gradient(circle at 50% 45%, #0b4f63 0%, #062b37 40%, #03151c 70%, #020708 100%)",
-        accent: "#67e8f9",
-        glow: "rgba(103, 232, 249, 0.3)",
+        gradient: "radial-gradient(circle at 60% 45%, #084c7a 0%, #032038 45%, #010a12 80%, #000000 100%)",
+        accent: "#38bdf8",
+        glow: "rgba(56, 189, 248, 0.45)",
         image: "/azure_mist.jpg",
         name: "Azure Mist"
       }
     };
 
-    // Hero Signature Perfume Carousel State Engine with 20-Perfume Map
-    const THEME_DATA = {
-      p1: { // Amber Gold
-        bg: "radial-gradient(circle at 50% 50%, #D4AF37 0%, #5C4017 60%, #150E04 100%)",
+    // ==========================================================
+    // 7. CENTRALIZED PERFUME CONFIGURATION & THEME SYSTEM
+    // ==========================================================
+    const PERFUME_CONFIG_DATA = {
+      p1: { // 1. Amber Gold → Golden Elixir
+        bottleColor: "Amber Gold",
+        background: "radial-gradient(circle at 62% 48%, #633f0c 0%, #2e1a03 45%, #080501 80%, #000000 100%)",
         accent: "#D4AF37",
-        mood: "warm, luxurious, sensual"
+        glow: "rgba(212, 175, 55, 0.45)",
+        feel: "Warm & Sensual",
+        family: "ORIENTAL EXTRAIT",
+        notes: "Saffron · Molten Honey · Aged Oud",
+        heroImage: "/hero_wide_p1.jpg"
       },
-      p2: { // Ocean Blue
-        bg: "radial-gradient(circle at 50% 50%, #0077BE 0%, #003366 60%, #001122 100%)",
-        accent: "#0077BE",
-        mood: "fresh, aquatic, elegant"
+      p2: { // 2. Ocean Blue → Azure Mist
+        bottleColor: "Ocean Blue",
+        background: "radial-gradient(circle at 62% 48%, #084c7a 0%, #032038 45%, #010a12 80%, #000000 100%)",
+        accent: "#38bdf8",
+        glow: "rgba(56, 189, 248, 0.45)",
+        feel: "Fresh & Aquatic",
+        family: "AQUATIC CITRUS",
+        notes: "Calabrian Bergamot · Frosted Mint · Sea Salt",
+        heroImage: "/hero_wide_p2.jpg"
       },
-      p3: { // Rose Pink
-        bg: "radial-gradient(circle at 50% 50%, #FF66CC 0%, #881144 60%, #220311 100%)",
-        accent: "#FF66CC",
-        mood: "romantic, floral, feminine"
+      p3: { // 3. Rose Pink → Rose Éclat
+        bottleColor: "Rose Pink",
+        background: "radial-gradient(circle at 62% 48%, #6b1d3d 0%, #300818 45%, #0d0106 80%, #000000 100%)",
+        accent: "#f472b6",
+        glow: "rgba(244, 114, 182, 0.45)",
+        feel: "Floral & Romantic",
+        family: "FLORAL PRESTIGE",
+        notes: "Centifolia Rose · Peony · Raspberry Nectar",
+        heroImage: "/hero_wide_p3.jpg"
       },
-      p4: { // Midnight Black
-        bg: "radial-gradient(circle at 50% 50%, #333333 0%, #111111 60%, #000000 100%)",
-        accent: "#888888",
-        mood: "bold, mysterious, premium"
+      p4: { // 4. Midnight Black → Noir Intense
+        bottleColor: "Midnight Black",
+        background: "radial-gradient(circle at 62% 48%, #25282e 0%, #121417 45%, #050608 80%, #000000 100%)",
+        accent: "#e2e8f0",
+        glow: "rgba(226, 232, 240, 0.4)",
+        feel: "Bold & Mysterious",
+        family: "WOODY LEATHER",
+        notes: "Smoked Agarwood · Cistus Labdanum · Tobacco Leaf",
+        heroImage: "/hero_wide_p4.jpg"
       },
-      p5: { // Emerald Green
-        bg: "radial-gradient(circle at 50% 50%, #50C878 0%, #0B5324 60%, #031409 100%)",
-        accent: "#50C878",
-        mood: "earthy, pine, refreshing"
+      p5: { // 5. Emerald Green → Emerald Woods
+        bottleColor: "Emerald Green",
+        background: "radial-gradient(circle at 62% 48%, #0f5231 0%, #062616 45%, #010c07 80%, #000000 100%)",
+        accent: "#34d399",
+        glow: "rgba(52, 211, 153, 0.45)",
+        feel: "Rich & Woody",
+        family: "AROMATIC WOODS",
+        notes: "Atlas Cedar · Florentine Iris · Cypress",
+        heroImage: "/hero_wide_p5.jpg"
       },
-      p6: { // Royal Purple
-        bg: "radial-gradient(circle at 50% 50%, #7851A9 0%, #301934 60%, #0D0410 100%)",
-        accent: "#7851A9",
-        mood: "royal, powder, elegant"
+      p6: { // 6. Royal Purple → Royal Amethyst
+        bottleColor: "Royal Purple",
+        background: "radial-gradient(circle at 62% 48%, #4a1c6d 0%, #220a33 45%, #08020d 80%, #000000 100%)",
+        accent: "#c084fc",
+        glow: "rgba(192, 132, 252, 0.45)",
+        feel: "Elegant & Enigmatic",
+        family: "POWDERY IRIS",
+        notes: "Iris Pallida · Grasse Jasmine · Lavender Absolute",
+        heroImage: "/hero_wide_p6.jpg"
       },
-      p7: { // Crystal Clear
-        bg: "radial-gradient(circle at 50% 50%, #E0F2FE 0%, #475569 60%, #0F172A 100%)",
-        accent: "#BAE6FD",
-        mood: "pure, laundry, clean"
+      p7: { // 7. Crystal Clear → Pure Crystal
+        bottleColor: "Crystal Clear",
+        background: "radial-gradient(circle at 62% 48%, #334155 0%, #182230 45%, #06090f 80%, #000000 100%)",
+        accent: "#e0f2fe",
+        glow: "rgba(224, 242, 254, 0.4)",
+        feel: "Clean & Refined",
+        family: "ALDEHYDIC SOLAR",
+        notes: "Orange Blossom · Clean Linen · Blond Woods",
+        heroImage: "/hero_wide_p7.jpg"
       },
-      p8: { // Ruby Red
-        bg: "radial-gradient(circle at 50% 50%, #E0115F 0%, #700224 60%, #200007 100%)",
-        accent: "#E0115F",
-        mood: "passionate, warm, spicy"
+      p8: { // 8. Ruby Red → Rouge Passion
+        bottleColor: "Ruby Red",
+        background: "radial-gradient(circle at 62% 48%, #730e2a 0%, #380312 45%, #0f0004 80%, #000000 100%)",
+        accent: "#fb7185",
+        glow: "rgba(251, 113, 133, 0.45)",
+        feel: "Passionate & Intense",
+        family: "AMBER GOURMAND",
+        notes: "Wild Cherry · Cinnamon Bark · Smoked Tonka",
+        heroImage: "/hero_wide_p8.jpg"
       },
-      p9: { // Turquoise
-        bg: "radial-gradient(circle at 50% 50%, #30D5C8 0%, #006064 60%, #002528 100%)",
-        accent: "#30D5C8",
-        mood: "zesty, summer, radiant"
+      p9: { // 9. Turquoise → Aqua Lumière
+        bottleColor: "Turquoise",
+        background: "radial-gradient(circle at 62% 48%, #0d5f63 0%, #042e30 45%, #010f10 80%, #000000 100%)",
+        accent: "#2dd4bf",
+        glow: "rgba(45, 212, 191, 0.45)",
+        feel: "Fresh & Radiant",
+        family: "SOLAR CITRUS",
+        notes: "Sicilian Mandarin · Key Lime · Basil Leaves",
+        heroImage: "/hero_wide_p9.jpg"
       },
-      p10: { // Peach Nude
-        bg: "radial-gradient(circle at 50% 50%, #FFDAB9 0%, #855030 60%, #28140B 100%)",
-        accent: "#FFDAB9",
-        mood: "velvety, soft, comforting"
+      p10: { // 10. Peach Nude → Peach Blossom
+        bottleColor: "Peach Nude",
+        background: "radial-gradient(circle at 62% 48%, #6e3e23 0%, #361c0e 45%, #0f0703 80%, #000000 100%)",
+        accent: "#fdba74",
+        glow: "rgba(253, 186, 116, 0.45)",
+        feel: "Soft & Delicate",
+        family: "CREAMY FLORAL",
+        notes: "Velvet Apricot · Soft Peach · Vanilla Milk",
+        heroImage: "/hero_wide_p10.jpg"
       },
-      p11: { // Forest Green
-        bg: "radial-gradient(circle at 50% 50%, #228B22 0%, #0B330B 60%, #020F02 100%)",
-        accent: "#228B22",
-        mood: "earthy, resinous, dark"
+      p11: { // 11. Forest Green → Green Oud
+        bottleColor: "Forest Green",
+        background: "radial-gradient(circle at 62% 48%, #16421a 0%, #0a210c 45%, #020b03 80%, #000000 100%)",
+        accent: "#4ade80",
+        glow: "rgba(74, 222, 128, 0.45)",
+        feel: "Deep & Earthy",
+        family: "EARTHY OUD",
+        notes: "Green Agarwood · Sandalwood · Oakmoss",
+        heroImage: "/hero_wide_p11.jpg"
       },
-      p12: { // Lavender
-        bg: "radial-gradient(circle at 50% 50%, #B57EDC 0%, #481E60 60%, #14041C 100%)",
-        accent: "#B57EDC",
-        mood: "calm, twilight, soothing"
+      p12: { // 12. Lavender → Lavender Élégance
+        bottleColor: "Lavender",
+        background: "radial-gradient(circle at 62% 48%, #463363 0%, #221833 45%, #09060d 80%, #000000 100%)",
+        accent: "#d8b4fe",
+        glow: "rgba(216, 180, 254, 0.45)",
+        feel: "Soft & Sophisticated",
+        family: "AROMATIC BOTANICAL",
+        notes: "French Lavender · Garden Sage · Soft White Musk",
+        heroImage: "/hero_wide_p12.jpg"
       },
-      p13: { // Golden Sand
-        bg: "radial-gradient(circle at 50% 50%, #E3A857 0%, #6E4717 60%, #1F1103 100%)",
-        accent: "#E3A857",
-        mood: "sandy, smoky, exotic"
+      p13: {
+        bottleColor: "Desert Gold Amber",
+        background: "radial-gradient(circle at 62% 48%, #593c12 0%, #2b1c06 45%, #090601 80%, #000000 100%)",
+        accent: "#f59e0b",
+        glow: "rgba(245, 158, 11, 0.45)",
+        feel: "Warm & Opulent",
+        family: "ORIENTAL AMBER",
+        notes: "Desert Amber · Smoky Frankincense · Sandalwood",
+        heroImage: "/hero_wide_p13.jpg"
       },
-      p14: { // Sapphire Blue
-        bg: "radial-gradient(circle at 50% 50%, #0F52BA 0%, #07255E 60%, #01061C 100%)",
-        accent: "#0F52BA",
-        mood: "confident, crisp, classic"
+      p14: {
+        bottleColor: "Sapphire Blue",
+        background: "radial-gradient(circle at 62% 48%, #102d57 0%, #06162e 45%, #01060f 80%, #000000 100%)",
+        accent: "#60a5fa",
+        glow: "rgba(96, 165, 250, 0.45)",
+        feel: "Mysterious & Deep",
+        family: "AQUATIC WOODS",
+        notes: "Blue Cypress · Juniper · Deep Mineral Water",
+        heroImage: "/hero_wide_p14.jpg"
       },
-      p15: { // Ivory White
-        bg: "radial-gradient(circle at 50% 50%, #FDFBF7 0%, #8C8275 60%, #1A1815 100%)",
-        accent: "#FDFBF7",
-        mood: "angelic, powdery, luxurious"
+      p15: {
+        bottleColor: "Ivory Velvet",
+        background: "radial-gradient(circle at 62% 48%, #36332f 0%, #1c1a17 45%, #070706 80%, #000000 100%)",
+        accent: "#f5f5f4",
+        glow: "rgba(245, 245, 244, 0.4)",
+        feel: "Pure & Serene",
+        family: "VELVET MUSK",
+        notes: "White Tea · Cashmeran · Velvet White Musk",
+        heroImage: "/hero_wide_p15.jpg"
       },
-      p16: { // Silver
-        bg: "radial-gradient(circle at 50% 50%, #C0C0C0 0%, #53565A 60%, #111417 100%)",
-        accent: "#C0C0C0",
-        mood: "frosty, metallic, modern"
+      p16: {
+        bottleColor: "Silver Chrome",
+        background: "radial-gradient(circle at 62% 48%, #2a313b 0%, #15191f 45%, #050608 80%, #000000 100%)",
+        accent: "#cbd5e1",
+        glow: "rgba(203, 213, 225, 0.4)",
+        feel: "Luminous & Cool",
+        family: "CHILLED OZONIC",
+        notes: "Iced Juniper · Birch Bark · White Pepper",
+        heroImage: "/hero_wide_p16.jpg"
       },
-      p17: { // Coral
-        bg: "radial-gradient(circle at 50% 50%, #FF7F50 0%, #902E0E 60%, #250A02 100%)",
-        accent: "#FF7F50",
-        mood: "bursting, tropical, sunny"
+      p17: {
+        bottleColor: "Warm Coral",
+        background: "radial-gradient(circle at 62% 48%, #662b1f 0%, #33130c 45%, #0f0402 80%, #000000 100%)",
+        accent: "#fb923c",
+        glow: "rgba(251, 146, 60, 0.45)",
+        feel: "Joyful & Sunlit",
+        family: "FRUITY CHYPRE",
+        notes: "Blood Orange · Passionfruit · Warm Amber",
+        heroImage: "/hero_wide_p17.jpg"
       },
-      p18: { // Amethyst Pink
-        bg: "radial-gradient(circle at 50% 50%, #E68FAC 0%, #6D2A43 60%, #230913 100%)",
-        accent: "#E68FAC",
-        mood: "royal, damask, dark"
+      p18: {
+        bottleColor: "Damask Amethyst",
+        background: "radial-gradient(circle at 62% 48%, #52204a 0%, #290d24 45%, #0a0309 80%, #000000 100%)",
+        accent: "#e879f9",
+        glow: "rgba(232, 121, 249, 0.45)",
+        feel: "Velvet & Regal",
+        family: "DAMASK ORIENTAL",
+        notes: "Turkish Rose · Plum Liqueur · Dark Patchouli",
+        heroImage: "/hero_wide_p18.jpg"
       },
-      p19: { // Sea Foam
-        bg: "radial-gradient(circle at 50% 50%, #9FE2BF 0%, #2A684C 60%, #061B11 100%)",
-        accent: "#9FE2BF",
-        mood: "weightless, dewy, light"
+      p19: {
+        bottleColor: "Marine Teal",
+        background: "radial-gradient(circle at 62% 48%, #0b4545 0%, #042121 45%, #010a0a 80%, #000000 100%)",
+        accent: "#5eead4",
+        glow: "rgba(94, 234, 212, 0.45)",
+        feel: "Aquatic & Ethereal",
+        family: "MINERAL OZONIC",
+        notes: "Sea Kelp · Salty Magnolia · White Ambergris",
+        heroImage: "/hero_wide_p19.jpg"
       },
-      p20: { // Espresso Brown
-        bg: "radial-gradient(circle at 50% 50%, #4B3621 0%, #26140A 60%, #0D0502 100%)",
-        accent: "#4B3621",
-        mood: "roasted, boozy, addictive"
+      p20: {
+        bottleColor: "Roasted Bronze",
+        background: "radial-gradient(circle at 62% 48%, #3d2314 0%, #1f1008 45%, #080301 80%, #000000 100%)",
+        accent: "#d97706",
+        glow: "rgba(217, 119, 6, 0.45)",
+        feel: "Intense & Addictive",
+        family: "GOURMAND WOODS",
+        notes: "Roasted Arabica · Bitter Cocoa · Bourbon Vanilla",
+        heroImage: "/hero_wide_p20.jpg"
       }
     };
 
+    // Enrich master PRODUCTS list with centralized perfume configuration
+    PRODUCTS.forEach(p => {
+      const cfg = PERFUME_CONFIG_DATA[p.id];
+      if (cfg) {
+        Object.assign(p, cfg);
+        p.bg = cfg.background; // alias for backward compatibility
+      }
+    });
+
+    // Central Single Source of Truth References
+    const PERFUMES = PRODUCTS;
+    window.PERFUMES = PERFUMES;
+
+    const THEME_DATA = {};
+    PERFUMES.forEach(p => {
+      THEME_DATA[p.id] = p;
+    });
+    THEME_DATA.oud = THEME_DATA.p1;
+    THEME_DATA.aqua = THEME_DATA.p2;
+    THEME_DATA.rose = THEME_DATA.p3;
+    THEME_DATA.noir = THEME_DATA.p4;
+    window.THEME_DATA = THEME_DATA;
+
+    // ==========================================================
+    // SINGLE SOURCE OF TRUTH FOR ACTIVE PERFUME STATE
+    // ==========================================================
+    let activePerfumeIndex = 0;
+    window.activePerfumeIndex = activePerfumeIndex;
+    window.heroCurrentIndex = activePerfumeIndex;
     let heroCarouselTimer = null;
-    let heroCurrentIndex = 0;
-    let isHeroTransitioning = false;
-    let isHeroHovered = false;
     let activeBgLayer = 1;
-    let activeAuraLayer = 1;
+
+    /**
+     * Centralized function to update the active perfume across the entire site.
+     * All components derive bottle, text, background, accent, and glow from this single source.
+     */
+    function setActivePerfume(target, options = {}) {
+      let targetIdx = activePerfumeIndex;
+      if (typeof target === "number") {
+        targetIdx = ((target % PERFUMES.length) + PERFUMES.length) % PERFUMES.length;
+      } else if (typeof target === "string") {
+        let key = target.trim();
+        if (key === "noir") key = "p4";
+        else if (key === "rose") key = "p3";
+        else if (key === "oud") key = "p1";
+        else if (key === "aqua") key = "p2";
+        const found = PERFUMES.findIndex(p => 
+          p.id === key || 
+          p.name.toLowerCase() === key.toLowerCase() || 
+          (p.bottleColor && p.bottleColor.toLowerCase() === key.toLowerCase())
+        );
+        if (found !== -1) targetIdx = found;
+      } else if (target && target.id) {
+        const found = PERFUMES.findIndex(p => p.id === target.id);
+        if (found !== -1) targetIdx = found;
+      }
+
+      activePerfumeIndex = targetIdx;
+      window.activePerfumeIndex = activePerfumeIndex;
+      window.heroCurrentIndex = activePerfumeIndex;
+
+      const currentPerfume = PERFUMES[activePerfumeIndex];
+      if (!currentPerfume) return;
+
+      // 1. Root Atmospheric CSS Variables (Syncs entire site atmosphere)
+      document.documentElement.style.setProperty("--perfume-background", currentPerfume.background);
+      document.documentElement.style.setProperty("--perfume-accent", currentPerfume.accent);
+      document.documentElement.style.setProperty("--perfume-glow", currentPerfume.glow);
+      document.documentElement.style.setProperty("--accent-color", currentPerfume.accent);
+      document.documentElement.style.setProperty("--accent-secondary", currentPerfume.accent);
+      document.documentElement.style.setProperty("--accent-glow", currentPerfume.glow);
+      document.documentElement.style.setProperty("--glow-color", currentPerfume.glow);
+      document.documentElement.style.setProperty("--background-color", currentPerfume.background);
+
+      // 2. Dual-Layer Smooth Backdrop Morph (700–1200ms cinematic curve, power2.inOut)
+      const globalLayer1 = document.getElementById("global-bg-layer-1");
+      const globalLayer2 = document.getElementById("global-bg-layer-2");
+      const heroLayer1 = document.getElementById("bg-layer-1");
+      const heroLayer2 = document.getElementById("bg-layer-2");
+
+      const animDuration = options.immediate ? 0.05 : 0.85;
+      const easeCurve = "power2.inOut";
+
+      const layersToTween = [globalLayer1, globalLayer2, heroLayer1, heroLayer2].filter(Boolean);
+      if (window.gsap) {
+        gsap.killTweensOf(layersToTween);
+      }
+
+      if (activeBgLayer === 1) {
+        // Crossfade to layer 2
+        if (globalLayer2) globalLayer2.style.background = currentPerfume.background;
+        if (heroLayer2) heroLayer2.style.background = currentPerfume.background;
+        if (window.gsap) {
+          if (globalLayer2) gsap.to(globalLayer2, { opacity: 1, duration: animDuration, ease: easeCurve });
+          if (heroLayer2) gsap.to(heroLayer2, { opacity: 1, duration: animDuration, ease: easeCurve });
+          if (globalLayer1) gsap.to(globalLayer1, { opacity: 0, duration: animDuration, ease: easeCurve });
+          if (heroLayer1) gsap.to(heroLayer1, { opacity: 0, duration: animDuration, ease: easeCurve });
+        } else {
+          if (globalLayer2) globalLayer2.style.opacity = "1";
+          if (heroLayer2) heroLayer2.style.opacity = "1";
+          if (globalLayer1) globalLayer1.style.opacity = "0";
+          if (heroLayer1) heroLayer1.style.opacity = "0";
+        }
+        activeBgLayer = 2;
+      } else {
+        // Crossfade to layer 1
+        if (globalLayer1) globalLayer1.style.background = currentPerfume.background;
+        if (heroLayer1) heroLayer1.style.background = currentPerfume.background;
+        if (window.gsap) {
+          if (globalLayer1) gsap.to(globalLayer1, { opacity: 1, duration: animDuration, ease: easeCurve });
+          if (heroLayer1) gsap.to(heroLayer1, { opacity: 1, duration: animDuration, ease: easeCurve });
+          if (globalLayer2) gsap.to(globalLayer2, { opacity: 0, duration: animDuration, ease: easeCurve });
+          if (heroLayer2) gsap.to(heroLayer2, { opacity: 0, duration: animDuration, ease: easeCurve });
+        } else {
+          if (globalLayer1) globalLayer1.style.opacity = "1";
+          if (heroLayer1) heroLayer1.style.opacity = "1";
+          if (globalLayer2) globalLayer2.style.opacity = "0";
+          if (heroLayer2) heroLayer2.style.opacity = "0";
+        }
+        activeBgLayer = 1;
+      }
+
+      // 3. Ambient Flacon Aura Tint
+      const flaconAura = document.getElementById("hero-flacon-aura");
+      if (flaconAura) {
+        flaconAura.style.background = `radial-gradient(circle, ${currentPerfume.glow || currentPerfume.accent} 0%, transparent 70%)`;
+      }
+
+      // 4. Hero Bottle / Campaign Image Transition (Synchronized with background at 0.85s)
+      const currentFullImg = document.getElementById("hero-campaign-full-img");
+      const nextFullImg = document.getElementById("hero-campaign-full-img-next");
+      const heroSrc = currentPerfume.heroImage || `/hero_wide_${currentPerfume.id}.jpg`;
+
+      if (currentFullImg) {
+        if (nextFullImg && window.gsap && !options.immediate) {
+          gsap.killTweensOf([nextFullImg, currentFullImg]);
+          nextFullImg.src = heroSrc;
+          nextFullImg.alt = `ÉLIXORA ${currentPerfume.name} Haute Parfumerie`;
+          gsap.set(nextFullImg, { opacity: 0 });
+          gsap.to(nextFullImg, {
+            opacity: 1,
+            duration: 0.85,
+            ease: easeCurve,
+            onComplete: () => {
+              currentFullImg.src = heroSrc;
+              currentFullImg.alt = `ÉLIXORA ${currentPerfume.name} Haute Parfumerie`;
+              gsap.set(nextFullImg, { opacity: 0 });
+            }
+          });
+        } else {
+          currentFullImg.src = heroSrc;
+          currentFullImg.alt = `ÉLIXORA ${currentPerfume.name} Haute Parfumerie`;
+          if (nextFullImg) {
+            if (window.gsap) gsap.killTweensOf(nextFullImg);
+            nextFullImg.style.opacity = "0";
+          }
+        }
+      }
+
+      // 5. Editorial Typography Cross-fade
+      const txtBrand = document.getElementById("hero-dynamic-brand");
+      const txtName = document.getElementById("hero-dynamic-name");
+      const badgeCategory = document.getElementById("hero-dynamic-category");
+      const badgeMood = document.getElementById("hero-dynamic-mood");
+      const txtDesc = document.getElementById("hero-dynamic-desc");
+      const txtNotes = document.getElementById("hero-dynamic-notes");
+      const discoverBtn = document.getElementById("hero-discover-btn");
+
+      const sigNotesStr = currentPerfume.topNotes ? 
+        (currentPerfume.topNotes.split('·')[0].trim() + ' · ' + (currentPerfume.heartNotes ? currentPerfume.heartNotes.split('·')[0].trim() : '') + ' · ' + (currentPerfume.baseNotes ? currentPerfume.baseNotes.split('·')[0].trim() : '')) : 
+        (currentPerfume.notes || "Saffron · Molten Honey · Aged Oud");
+
+      if (txtBrand) txtBrand.textContent = "ÉLIXORA · THE ART OF FRAGRANCE";
+      if (txtName) txtName.textContent = currentPerfume.name.toUpperCase();
+      if (badgeCategory) badgeCategory.textContent = currentPerfume.category.toUpperCase() + (currentPerfume.concentration ? ' · ' + currentPerfume.concentration.toUpperCase() : '');
+      if (badgeMood) badgeMood.textContent = currentPerfume.feel || currentPerfume.mood || currentPerfume.category;
+      if (txtDesc) txtDesc.textContent = currentPerfume.description;
+      if (txtNotes) txtNotes.textContent = sigNotesStr;
+      if (discoverBtn) {
+        discoverBtn.onclick = (e) => {
+          e.stopPropagation();
+          openProductModal(currentPerfume.id);
+        };
+      }
+
+      // 6. Update Hero Carousel dots
+      const heroDots = document.querySelectorAll("#hero-carousel-dots .hero-dot");
+      heroDots.forEach((dot, idx) => {
+        dot.classList.toggle("active", idx === activePerfumeIndex);
+      });
+
+      // 7. Update horizontal selector pills without shifting page scroll
+      const themePillsWrap = document.querySelector(".theme-pills");
+      document.querySelectorAll(".theme-pill-btn").forEach(btn => {
+        const btnTheme = btn.getAttribute("data-theme");
+        const isActive = (btnTheme === currentPerfume.id);
+        btn.classList.toggle("active", isActive);
+        if (isActive && options.isManual && themePillsWrap) {
+          const scrollTarget = btn.offsetLeft - (themePillsWrap.clientWidth / 2) + (btn.clientWidth / 2);
+          themePillsWrap.scrollTo({ left: scrollTarget, behavior: "smooth" });
+        }
+      });
+    }
+
+    // Unified backward-compatible alias that delegates to setActivePerfume
+    function applyTheme(themeKey, syncHero = true, isManual = false) {
+      setActivePerfume(themeKey, { isManual });
+    }
+    window.applyTheme = applyTheme;
+    window.setActivePerfume = setActivePerfume;
 
     function initHeroPerfumeCarousel() {
       const wrapper = document.getElementById("hero-perfume-carousel-wrap");
@@ -8918,39 +10300,30 @@
 
       if (dotsContainer) {
         dotsContainer.innerHTML = "";
-        PRODUCTS.forEach((p, idx) => {
+        PERFUMES.forEach((p, idx) => {
           const dot = document.createElement("button");
-          dot.className = "hero-dot" + (idx === 0 ? " active" : "");
+          dot.className = "hero-dot" + (idx === activePerfumeIndex ? " active" : "");
           dot.setAttribute("data-idx", idx);
-          dot.title = p.name;
+          dot.title = `${p.name} (${p.bottleColor})`;
           dot.onclick = (e) => {
             e.stopPropagation();
-            goToHeroSlide(idx);
+            setActivePerfume(idx);
             resetHeroAutoAdvance();
           };
           dotsContainer.appendChild(dot);
         });
       }
 
-      function goToHeroSlide(index) {
-        if (isHeroTransitioning) return;
-        heroCurrentIndex = (index + PRODUCTS.length) % PRODUCTS.length;
-        
-        // Update dots state
-        const dots = dotsContainer ? dotsContainer.querySelectorAll(".hero-dot") : [];
-        dots.forEach((dot, idx) => {
-          dot.classList.toggle("active", idx === heroCurrentIndex);
-        });
-
-        applyTheme(PRODUCTS[heroCurrentIndex].id, false);
-      }
-
       function nextHeroSlide() {
-        goToHeroSlide(heroCurrentIndex + 1);
+        setActivePerfume(activePerfumeIndex + 1);
       }
 
       function prevHeroSlide() {
-        goToHeroSlide(heroCurrentIndex - 1);
+        setActivePerfume(activePerfumeIndex - 1);
+      }
+
+      function goToHeroSlide(index) {
+        setActivePerfume(index);
       }
 
       if (nextBtn) {
@@ -8968,21 +10341,40 @@
         };
       }
 
+      // Keyboard Accessibility: ArrowLeft and ArrowRight navigation
+      window.addEventListener("keydown", (e) => {
+        if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.isContentEditable)) return;
+        if (e.key === "ArrowLeft") {
+          prevHeroSlide();
+          resetHeroAutoAdvance();
+        } else if (e.key === "ArrowRight") {
+          nextHeroSlide();
+          resetHeroAutoAdvance();
+        }
+      });
+
+      // Auto-rotation every 3 seconds without getting stuck
       function startHeroAutoAdvance() {
         if (heroCarouselTimer) clearInterval(heroCarouselTimer);
         heroCarouselTimer = setInterval(() => {
-          // Only auto-advance if the user is currently viewing the hero section
-          const isHeroInView = window.scrollY < (window.innerHeight * 0.7);
-          if (!isHeroHovered && isHeroInView) {
+          const heroEl = document.getElementById("hero");
+          const isHeroInView = heroEl ? (
+            heroEl.getBoundingClientRect().top < (window.innerHeight * 0.75) &&
+            heroEl.getBoundingClientRect().bottom > 0
+          ) : (window.scrollY < (window.innerHeight * 0.85));
+
+          if (isHeroInView) {
             nextHeroSlide();
           }
-        }, 5500); // Luxury 5.5-second pace
+        }, 3000); // Rotates every 3 seconds
       }
 
       function resetHeroAutoAdvance() {
         startHeroAutoAdvance();
       }
 
+      window.startHeroAutoAdvance = startHeroAutoAdvance;
+      window.resetHeroAutoAdvance = resetHeroAutoAdvance;
       window.stopHeroAutoAdvance = function() {
         if (heroCarouselTimer) {
           clearInterval(heroCarouselTimer);
@@ -8992,13 +10384,7 @@
 
       startHeroAutoAdvance();
 
-      // Pause/resume auto-advance on mouse hover for user-guided exploration
-      if (wrapper) {
-        wrapper.onmouseenter = () => { isHeroHovered = true; };
-        wrapper.onmouseleave = () => { isHeroHovered = false; };
-      }
-
-      // Touch & Swipe gestures for Hero Fragrances (swiping changes slides, preventing browser back navigation)
+      // Touch & Swipe gestures for Hero Fragrances (works across iOS Safari, Android, Chrome)
       let heroTouchStartX = 0;
       let heroTouchStartY = 0;
       let heroTouchEndX = 0;
@@ -9033,7 +10419,7 @@
           isHeroTouchActive = false;
           const diffX = heroTouchEndX - heroTouchStartX;
           const diffY = heroTouchEndY - heroTouchStartY;
-          if (Math.abs(diffX) > 38 && Math.abs(diffX) > Math.abs(diffY)) {
+          if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
             window.heroWasSwiped = true;
             if (diffX < 0) {
               nextHeroSlide();
@@ -9046,169 +10432,43 @@
         }, { passive: true });
       }
 
-      // Sync first product on load
-      setTimeout(() => {
-        applyTheme(PRODUCTS[0].id, false);
-      }, 100);
+      // Initial synchronization on load
+      setActivePerfume(0, { immediate: true });
 
       // Expose function to slide hero carousel when a theme pill is clicked
       window.syncHeroCarouselToTheme = function(themeKey) {
-        let resolvedKey = themeKey;
-        if (themeKey === "noir") resolvedKey = "p4";
-        else if (themeKey === "rose") resolvedKey = "p3";
-        else if (themeKey === "oud") resolvedKey = "p1";
-        else if (themeKey === "aqua") resolvedKey = "p2";
-
-        const idx = PRODUCTS.findIndex(p => p.id === resolvedKey);
-        if (idx !== -1) {
-          goToHeroSlide(idx);
-          resetHeroAutoAdvance();
-        }
+        setActivePerfume(themeKey, { isManual: true });
+        resetHeroAutoAdvance();
       };
     }
 
-    function applyTheme(themeKey, syncHero = true, isManual = false) {
-      let resolvedKey = themeKey;
-      if (themeKey === "noir") resolvedKey = "p4";
-      else if (themeKey === "rose") resolvedKey = "p3";
-      else if (themeKey === "oud") resolvedKey = "p1";
-      else if (themeKey === "aqua") resolvedKey = "p2";
+    // Scroll & Section Navigation Sync: Ensures hero and background are always synchronized
+    function initHeroScrollSync() {
+      const heroEl = document.getElementById("hero");
+      if (!heroEl) return;
 
-      const product = PRODUCTS.find(p => p.id === resolvedKey) || PRODUCTS[0];
-      const theme = THEME_DATA[product.id] || THEME_DATA.p1;
-
-      // Prevent simultaneous conflicting transitions
-      isHeroTransitioning = true;
-      setTimeout(() => { isHeroTransitioning = false; }, 450);
-
-      // 1. Dual-Layer Smooth Backdrop Morph
-      const layer1 = document.getElementById("bg-layer-1");
-      const layer2 = document.getElementById("bg-layer-2");
-      if (layer1 && layer2) {
-        if (activeBgLayer === 1) {
-          layer2.style.background = theme.bg;
-          if (window.gsap) {
-            gsap.to(layer2, { opacity: 1, duration: 0.45, ease: "power2.out" });
-            gsap.to(layer1, { opacity: 0, duration: 0.45, ease: "power2.out" });
-          } else {
-            layer2.style.opacity = "1";
-            layer1.style.opacity = "0";
-          }
-          activeBgLayer = 2;
-        } else {
-          layer1.style.background = theme.bg;
-          if (window.gsap) {
-            gsap.to(layer1, { opacity: 1, duration: 0.45, ease: "power2.out" });
-            gsap.to(layer2, { opacity: 0, duration: 0.45, ease: "power2.out" });
-          } else {
-            layer1.style.opacity = "1";
-            layer2.style.opacity = "0";
-          }
-          activeBgLayer = 1;
-        }
-      }
-
-      // 3. Luxurious Editorial Typography Cross-fade
-      const txtBrand = document.getElementById("hero-dynamic-brand");
-      const txtName = document.getElementById("hero-dynamic-name");
-      const badgeCategory = document.getElementById("hero-dynamic-category");
-      const badgeMood = document.getElementById("hero-dynamic-mood");
-      const txtDesc = document.getElementById("hero-dynamic-desc");
-      const discoverBtn = document.getElementById("hero-discover-btn");
-
-      const textGroup = [txtBrand, txtName, badgeCategory, badgeMood, txtDesc];
-      
-      if (window.gsap && txtName) {
-        gsap.to(textGroup, {
-          opacity: 0,
-          y: -10,
-          duration: 0.15,
-          stagger: 0.015,
-          ease: "power2.in",
-          onComplete: () => {
-            if (txtBrand) txtBrand.textContent = `ÉLIXORA · ${product.brand === "ÉLIXORA" ? "LUXURY" : product.brand.toUpperCase()}`;
-            if (txtName) txtName.textContent = product.name.toUpperCase();
-            if (badgeCategory) badgeCategory.textContent = product.category.toUpperCase();
-            if (badgeMood) badgeMood.textContent = theme.mood;
-            if (txtDesc) txtDesc.textContent = product.description;
-            if (discoverBtn) {
-              discoverBtn.onclick = (e) => {
-                e.stopPropagation();
-                openProductModal(product.id);
-              };
+      let lastInView = true;
+      const checkHeroVisibility = () => {
+        const rect = heroEl.getBoundingClientRect();
+        const isInView = rect.top < (window.innerHeight * 0.75) && rect.bottom > 0;
+        if (isInView && !lastInView) {
+          // Returning to hero: ensure hero bottle & background match current active perfume
+          const currentPerfume = PERFUMES[activePerfumeIndex];
+          const currentImg = document.getElementById("hero-campaign-full-img");
+          if (currentImg && currentPerfume) {
+            const expectedSrc = currentPerfume.heroImage || `/hero_wide_${currentPerfume.id}.jpg`;
+            if (!currentImg.src.includes(`hero_wide_${currentPerfume.id}`)) {
+              setActivePerfume(activePerfumeIndex, { immediate: false });
             }
-
-            gsap.to(textGroup, {
-              opacity: 1,
-              y: 0,
-              duration: 0.3,
-              stagger: 0.02,
-              ease: "power2.out"
-            });
           }
-        });
-      } else {
-        if (txtBrand) txtBrand.textContent = `ÉLIXORA · LUXURY`;
-        if (txtName) txtName.textContent = product.name.toUpperCase();
-        if (badgeCategory) badgeCategory.textContent = product.category.toUpperCase();
-        if (badgeMood) badgeMood.textContent = theme.mood;
-        if (txtDesc) txtDesc.textContent = product.description;
-        if (discoverBtn) {
-          discoverBtn.onclick = () => openProductModal(product.id);
+          if (window.startHeroAutoAdvance) {
+            window.startHeroAutoAdvance();
+          }
         }
-      }
+        lastInView = isInView;
+      };
 
-      // 4. Hero Full-Screen Campaign Image Cross-fade (Full Viewport Cover, No Circles, Perfectly Fitted)
-      const currentFullImg = document.getElementById("hero-campaign-full-img");
-      const nextFullImg = document.getElementById("hero-campaign-full-img-next");
-      // All 20 fragrance aura themes (p1 through p20) have dedicated seamless widescreen compositions
-      const heroSrc = `/hero_wide_${product.id}.jpg`;
-      
-      if (currentFullImg) {
-        if (nextFullImg && window.gsap) {
-          nextFullImg.src = heroSrc;
-          nextFullImg.alt = `ÉLIXORA ${product.name} Eau de Parfum`;
-          gsap.to(nextFullImg, {
-            opacity: 1,
-            duration: 0.45,
-            ease: "power2.out",
-            onComplete: () => {
-              currentFullImg.src = heroSrc;
-              currentFullImg.alt = `ÉLIXORA ${product.name} Eau de Parfum`;
-              gsap.set(nextFullImg, { opacity: 0 });
-            }
-          });
-        } else {
-          currentFullImg.src = heroSrc;
-          currentFullImg.alt = `ÉLIXORA ${product.name} Eau de Parfum`;
-        }
-      }
-
-      // Backwards sync compatible mode
-      if (syncHero) {
-        const dotsContainer = document.getElementById("hero-carousel-dots");
-        const idx = PRODUCTS.findIndex(p => p.id === product.id);
-        if (idx !== -1) {
-          heroCurrentIndex = idx;
-          const dots = dotsContainer ? dotsContainer.querySelectorAll(".hero-dot") : [];
-          dots.forEach((dot, i) => {
-            dot.classList.toggle("active", i === idx);
-          });
-        }
-      }
-
-      // 5. Update active status of the horizontal selector pills without shifting page scroll
-      const themePillsWrap = document.querySelector(".theme-pills");
-      document.querySelectorAll(".theme-pill-btn").forEach(btn => {
-        const btnTheme = btn.getAttribute("data-theme");
-        const isActive = (btnTheme === resolvedKey);
-        btn.classList.toggle("active", isActive);
-        
-        if (isActive && isManual && themePillsWrap) {
-          const scrollTarget = btn.offsetLeft - (themePillsWrap.clientWidth / 2) + (btn.clientWidth / 2);
-          themePillsWrap.scrollTo({ left: scrollTarget, behavior: "smooth" });
-        }
-      });
+      window.addEventListener("scroll", checkHeroVisibility, { passive: true });
     }
 
     document.querySelectorAll(".theme-pill-btn").forEach(btn => {
@@ -9216,12 +10476,12 @@
         if (window.stopHeroAutoAdvance) {
           window.stopHeroAutoAdvance();
         }
-        applyTheme(btn.getAttribute("data-theme"), true, true);
+        setActivePerfume(btn.getAttribute("data-theme"), { isManual: true });
       });
     });
 
     function previewIngredientTheme(themeKey) {
-      applyTheme(themeKey, true, true);
+      setActivePerfume(themeKey, { isManual: true });
     }
 
     // 8. Header Scroll Reduction
@@ -9241,7 +10501,9 @@
       const isWish = wishlist.some(item => item.id === p.id);
       const isCompared = compareList.includes(p.id);
       return `
-        <article class="product-card" onclick="if (!window.carouselWasSwiped) openProductModal('${p.id}')">
+        <article class="product-card" 
+          onmouseenter="if (window.innerWidth > 768) applyTheme('${p.id}', false);" 
+          onclick="if (!window.carouselWasSwiped) { applyTheme('${p.id}', false); openProductModal('${p.id}'); }">
           <div class="card-top-actions" onclick="event.stopPropagation()">
             ${p.isBestseller ? '<span class="tag-badge bestseller">Bestseller</span>' : `<span class="tag-badge">${p.category}</span>`}
             <div class="card-action-btns">
@@ -9260,7 +10522,7 @@
           </div>
           <div class="product-img-wrapper">
             <img src="${p.image}" alt="${p.name}" loading="lazy" />
-            <button class="quick-view-overlay-btn" onclick="event.stopPropagation(); openProductModal('${p.id}')">QUICK VIEW</button>
+            <button class="quick-view-overlay-btn" onclick="event.stopPropagation(); applyTheme('${p.id}', false); openProductModal('${p.id}')">QUICK VIEW</button>
           </div>
           <div class="product-info">
             <span class="product-brand">${p.brand}</span>
@@ -9385,6 +10647,15 @@
         if (animate) isCarouselTransitioning = true;
         carouselCurrentIndex = index;
         updateCarouselPosition(animate);
+
+        // When user swipes or navigates for other perfumes, smoothly change background color perfume-wise across whole website
+        if (items && items.length > 0) {
+          const currentItemIdx = ((carouselCurrentIndex % carouselCardCount) + carouselCardCount) % carouselCardCount;
+          const currentProduct = items[currentItemIdx];
+          if (currentProduct) {
+            applyTheme(currentProduct.id, false);
+          }
+        }
       }
 
       function nextSlide() {
@@ -9588,11 +10859,26 @@
     }
 
     // Filter by button
+    const FILTER_THEME_MAP = {
+      FLORAL: "p3",
+      WOODY: "p5",
+      FRESH: "p2",
+      ORIENTAL: "p1",
+      GOURMAND: "p8",
+      MEN: "p4",
+      WOMEN: "p3",
+      UNISEX: "p1",
+      ALL: "p1"
+    };
+
     document.querySelectorAll("#catalog-filter-pills .filter-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll("#catalog-filter-pills .filter-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         currentFilter = btn.getAttribute("data-filter");
+        if (FILTER_THEME_MAP[currentFilter]) {
+          applyTheme(FILTER_THEME_MAP[currentFilter], false);
+        }
         renderCatalog();
       });
     });
@@ -9611,6 +10897,9 @@
       document.querySelectorAll("#catalog-filter-pills .filter-btn").forEach(b => {
         b.classList.toggle("active", b.getAttribute("data-filter") === currentFilter);
       });
+      if (FILTER_THEME_MAP[currentFilter]) {
+        applyTheme(FILTER_THEME_MAP[currentFilter], false);
+      }
       renderCatalog();
     }
 
@@ -9682,6 +10971,7 @@
       if (!product) return;
 
       activeModalProduct = product;
+      setActivePerfume(product.id);
       activeConcentrationMultiplier = 1.0;
       activeSizeMultiplier = 1.0;
       activeConcentrationName = "EDP";
@@ -9721,6 +11011,39 @@
         });
       }
     }
+
+    function navigateModalPerfume(delta) {
+      if (!activeModalProduct) return;
+      const currIdx = PERFUMES.findIndex(p => p.id === activeModalProduct.id);
+      const nextIdx = (currIdx + delta + PERFUMES.length) % PERFUMES.length;
+      openProductModal(PERFUMES[nextIdx].id);
+    }
+    window.navigateModalPerfume = navigateModalPerfume;
+
+    // Mobile swipe listener for product modal
+    (function initModalSwipe() {
+      const modal = document.getElementById("product-detail-modal");
+      if (!modal) return;
+      let modalTouchStartX = 0;
+      let modalTouchStartY = 0;
+      modal.addEventListener("touchstart", (e) => {
+        if (e.touches.length > 1) return;
+        modalTouchStartX = e.touches[0].clientX;
+        modalTouchStartY = e.touches[0].clientY;
+      }, { passive: true });
+      modal.addEventListener("touchend", (e) => {
+        if (!e.changedTouches || e.changedTouches.length === 0) return;
+        const diffX = e.changedTouches[0].clientX - modalTouchStartX;
+        const diffY = e.changedTouches[0].clientY - modalTouchStartY;
+        if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+          if (diffX < 0) {
+            navigateModalPerfume(1);
+          } else {
+            navigateModalPerfume(-1);
+          }
+        }
+      }, { passive: true });
+    })();
 
     function closeProductModal() {
       const modal = document.getElementById("product-detail-modal");
@@ -10643,6 +11966,21 @@
 
       const price = calculateStudioPrice();
       if (previewPrice) previewPrice.textContent = `₹${price.toLocaleString("en-IN")}`;
+
+      const visualizerName = document.getElementById("visualizer-blend-name");
+      if (visualizerName) visualizerName.textContent = customStudioState.bottleName || "Aura Sovereign";
+
+      const cardSize = document.getElementById("card-size-label");
+      if (cardSize) cardSize.textContent = `${customStudioState.flaconSize}ml Decanter`;
+
+      const cardBase = document.getElementById("card-base-label");
+      if (cardBase) cardBase.textContent = customStudioState.baseOilName || "Mysore Sandalwood";
+
+      const cardHeart = document.getElementById("card-heart-label");
+      if (cardHeart) cardHeart.textContent = (customStudioState.heartNotes && customStudioState.heartNotes.length) ? customStudioState.heartNotes.join(", ") : "Grasse Rose Centifolia";
+
+      const studioPriceVal = document.getElementById("studio-price-val");
+      if (studioPriceVal) studioPriceVal.textContent = `₹${price.toLocaleString("en-IN")}`;
     }
 
     function addCustomBlendToBag() {
@@ -11808,6 +13146,7 @@
       setupCursorInteractions();
       initCollectionCardHoverAnimations();
       initHeroPerfumeCarousel();
+      initHeroScrollSync();
       initScrollAnimations();
 
       // Universal Smooth Anchor Navigation (prevents hash jumps to top/homepage)
